@@ -246,6 +246,9 @@
           "bedrooms": 3,
           "bathrooms": 2,
           "ageYears": 20,
+          "photos":[
+            "https://http2.mlstatic.com/D_NQ_NP_827081-MLA119285299219_102026-O.webp"
+          ],
           "tags": [
             "jardin",
             "muelle"
@@ -280,6 +283,9 @@
           "bedrooms": 3,
           "bathrooms": 2,
           "ageYears": 60,
+          "photos":[
+            "https://http2.mlstatic.com/D_NQ_NP_625405-MLC116806668172_092026-O-departamento-clasico-renovado-173371.webp"
+          ],
           "tags": [
             "ascensor",
             "balcon"
@@ -318,6 +324,9 @@
           "bedrooms": 3,
           "bathrooms": 2,
           "ageYears": 25,
+          "photos":[
+            "https://images.homify.com/v1445267095/p/photo/image/1020122/CASA_-_AM_01.jpg"
+          ],
           "tags": [
             "terraza",
             "parrilla"
@@ -356,6 +365,9 @@
           "bedrooms": 1,
           "bathrooms": 1,
           "ageYears": 20,
+          "photos":[
+            "https://cdn.roomix.ai/1/30708688/60194701/2079544072_interior_other.jpg"
+          ],
           "tags": [
             "luminoso"
           ],
@@ -393,6 +405,9 @@
           "bedrooms": 2,
           "bathrooms": 1,
           "ageYears": 50,
+          "photos":[
+            "https://imgar.zonapropcdn.com/avisos/1/00/60/48/49/20/720x532/2086636027.jpg?isFirstImage=true"
+          ],
           "tags": [
             "a-refaccionar"
           ],
@@ -430,6 +445,11 @@
           "bedrooms": 1,
           "bathrooms": 1,
           "ageYears": 35,
+          "photos":[
+            "https://imgar.zonapropcdn.com/avisos/1/00/60/62/55/59/360x266/2090134119.jpg?isFirstImage=true",
+            "https://dictator.es/wp-content/uploads/2023/09/Ascensor-DHM500-Dictator.jpg",
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT9QBXJfzGyus5basxRQ0-QtxTNMOTd1JIoYCpqMlaQkgCy8IGh4qa-ZEo&s=10"
+          ],
           "tags": [
             "ascensor"
           ],
@@ -450,6 +470,11 @@
           "address": "Ruta 25 km 10",
           "area": "Escobar",
           "totalAreaM2": 450,
+          "photos":[
+            "https://www.didomenicapalermo.com.ar/media/k2/items/cache/8d967de4fb0deac392e6fc1838a87d15_XL.jpg", 
+            "https://veninipropiedades.com/_next/image?url=https%3A%2F%2Fstatic.tokkobroker.com%2Fw_pics%2F11682784_9425799886312083360420982339489905676577523868511378603543347113569232558269.jpg&w=3840&q=75", 
+            "https://http2.mlstatic.com/D_NQ_NP_798111-MLA113144409443_062026-O.webp"
+          ],
           "tags": [],
           "timeline": [
             {
@@ -486,6 +511,11 @@
           "bedrooms": 1,
           "bathrooms": 1,
           "ageYears": 10,
+          "photos":[
+            "https://www.argenprop.com/static-content/05678311/3e0bdb98-dfe3-49f2-9a20-653c4d356be5_u_medium.jpg",
+            "https://imgar.zonapropcdn.com/avisos/1/00/59/86/40/53/360x266/2071570007.jpg?isFirstImage=true",
+            "https://imgar.zonapropcdn.com/avisos/1/00/60/52/35/56/360x266/2087585971.jpg?isFirstImage=true"
+          ],
           "tags": [
             "balcon",
             "ascensor"
@@ -516,6 +546,11 @@
           "bedrooms": 3,
           "bathrooms": 2,
           "ageYears": 18,
+          "photos":[
+            "https://images.homify.com/v1453221031/p/photo/image/1255902/1175383_506184606131610_1951094553_n.jpg",
+            "https://images.homify.com/v1458674207/p/photo/image/1416853/Parrado063.jpg",
+            "https://arquitectolejtman.com/wp-content/uploads/2019/09/Q6-Quincho-11.jpeg"
+          ],
           "tags": [
             "quincho",
             "cochera",
@@ -542,6 +577,11 @@
           "address": "Calle 14 y 150",
           "area": "Berazategui",
           "totalAreaM2": 400,
+          "photos":[
+            "https://www.rionegro.com.ar/wp-content/uploads/2026/08/image-2026-08-01T110624.452.jpg",
+            "https://propiedadesel31.com/_next/image?url=https%3A%2F%2Ffresh-feast-4c3e94aa79.media.strapiapp.com%2Flote_esq_medina_815d51836f.jpg&w=3840&q=75",
+            "https://d1acdg20u0pmxj.cloudfront.net/listings/8601b8cd-147a-4fb7-9d11-f39d6d643988/860x440/1f301731-4600-41ba-ae19-2871198641f3.jpg"
+          ],
           "tags": [
             "esquina"
           ],
@@ -588,6 +628,11 @@
           "bedrooms": 2,
           "bathrooms": 2,
           "ageYears": 5,
+          "photos":[
+            "https://imgar.zonapropcdn.com/avisos/1/00/58/80/64/80/360x266/2044912742.jpg?isFirstImage=true",
+            "https://imgar.zonapropcdn.com/avisos/1/00/60/28/58/84/360x266/2081829061.jpg?isFirstImage=true",
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSygFoX4MLuqqQ26SeQVHBnx-hs7zW5ZAsUDOSrovNiZ5Pfc9Xg1WYFNuNO&s=10"
+          ],
           "tags": [
             "pileta",
             "cochera",
@@ -620,7 +665,7 @@
           "bedrooms": 4,
           "bathrooms": 3,
           "ageYears": 30,
-          "photo":[
+          "photos":[
             "https://images.unsplash.com/photo-1639444184273-edd179bad79d?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=NHwxMjA3fDA%3D", 
             "https://images.unsplash.com/photo-1569152811536-fb47aced8409?q=80&w=1169&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=NHwxMjA3fDA%3D", 
             "https://images.unsplash.com/photo-1556020685-ae41abfc9365?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=NHwxMjA3fDA%3D"],
@@ -655,6 +700,10 @@
           "bedrooms": 3,
           "bathrooms": 3,
           "ageYears": 15,
+          "photos":[
+            "https://images.homify.com/v1494934107/p/photo/image/2011993/75_Exterior_3.jpg",
+            "https://imgar.zonapropcdn.com/avisos/1/00/59/59/98/45/360x266/2066719871.jpg?isFirstImage=true",
+            "https://imgar.zonapropcdn.com/avisos/1/00/60/66/45/29/360x266/2091241695.jpg?isFirstImage=true"],
           "tags": [
             "jardin",
             "quincho",
@@ -686,7 +735,7 @@
           "bedrooms": 0,
           "bathrooms": 1,
           "ageYears": 0,
-          "photo":[
+          "photos":[
             "https://plus.unsplash.com/premium_photo-1746888841424-f1504e856323?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=NHwxMjA3fDA%3D",
             "https://images.unsplash.com/photo-1556912173-3bb406ef7e77?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=NHwxMjA3fDA%3D",
             "https://images.unsplash.com/photo-1554995207-c18c203602cb?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=NHwxMjA3fDA%3D"
@@ -717,7 +766,7 @@
           "address": "Ruta 202 km 38",
           "area": "Pacheco",
           "totalAreaM2": 600,
-          "photo":[
+          "photos":[
             "https://www.alta-patagonia.com.ar/wp-content/uploads/2024/12/WhatsApp-Image-2024-12-17-at-12.12.01-3-525x328.jpeg", 
             "https://imgar.zonapropcdn.com/avisos/1/00/49/91/59/45/720x532/2007408902.jpg?isFirstImage=true", 
             "https://d1acdg20u0pmxj.cloudfront.net/listings/4c151864-29e0-4124-8d0d-94abafb1508c/860x440/a13023f7-8fc7-441f-998e-322cc5c8a882.jpg"
