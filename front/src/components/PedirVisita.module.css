@@ -1,0 +1,19 @@
+.visita {
+  width: 100%;
+  max-width: 44rem;
+  padding: 0.5rem 1rem 1rem;
+  background: #fff;
+  border: 1px solid var(--color-borde);
+  border-radius: 8px;
+}
+
+/* Dentro de la caja el formulario no necesita el margen de arriba. */
+.visita .form {
+  margin-top: 0;
+}
+
+.confirmacion {
+  padding: 1rem;
+  background: #e3f4e6;
+  border-color: #b9dcc0;
+}

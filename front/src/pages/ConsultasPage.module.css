@@ -1,0 +1,29 @@
+/* Aviso de "esa consulta ya fue respondida" (se responde desde dos pestañas a la vez). */
+.aviso {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin: 20px 0;
+  padding: 14px 16px;
+  color: #245c36;
+  text-align: left;
+  background-color: #eaf7ee;
+  border: 1px solid #b7e4c7;
+  border-radius: 8px;
+}
+
+.icono {
+  font-size: 20px;
+  font-weight: bold;
+  color: #198754;
+}
+
+.aviso strong {
+  display: block;
+  margin-bottom: 4px;
+}
+
+.aviso p {
+  margin: 0;
+  font-size: 14px;
+}

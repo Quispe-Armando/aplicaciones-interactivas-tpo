@@ -1,0 +1,32 @@
+.solicitud {
+  padding: 0.7rem 1rem;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-left: 4px solid #bbb;
+  border-radius: 8px;
+}
+
+.solicitud p {
+  margin: 0.2rem 0;
+}
+
+/* El borde de la izquierda sale del estado de la solicitud: estilos[solicitud.status]. */
+.PENDING {
+  border-left-color: #f1c40f;
+}
+.CONFIRMED {
+  border-left-color: #2e9e4f;
+}
+.COMPLETED {
+  border-left-color: #2f6fd1;
+}
+.REJECTED,
+.CANCELLED {
+  border-left-color: var(--color-peligro);
+  opacity: 0.75;
+}
+
+.mensaje {
+  font-style: italic;
+  color: #444;
+}

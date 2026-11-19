@@ -1,0 +1,40 @@
+/* Una clase base y una por estado: la clase se elige con el estado mismo (estilos[estado]), sin if ni switch. */
+.badge {
+  display: inline-block;
+  padding: 0.1rem 0.5rem;
+  font-size: 0.85rem;
+  background: #eee;
+  border-radius: 999px;
+}
+
+/* Propiedad */
+.PUBLISHED {
+  background: #d9f2de;
+}
+.RESERVED {
+  background: #fff0c2;
+}
+.PAUSED {
+  background: #e3e8ef;
+}
+.SOLD,
+.RENTED {
+  background: #d6e4ff;
+}
+.CANCELLED {
+  background: #f9d6d6;
+}
+
+/* Solicitud de visita (y consulta: Pendiente / Respondida) */
+.PENDING {
+  background: #fff0c2;
+}
+.CONFIRMED {
+  background: #d9f2de;
+}
+.COMPLETED {
+  background: #d6e4ff;
+}
+.REJECTED {
+  background: #f9d6d6;
+}

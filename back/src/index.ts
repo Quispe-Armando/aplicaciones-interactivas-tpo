@@ -1,16 +1,14 @@
 import "reflect-metadata";
 import "dotenv/config";
-import express from "express";
-import cors from "cors";
+import { createApp } from "./app";
 import { AppDataSource } from "./config/data-source";
-import { router } from "./routes";
+import { getJwtSecret } from "./config/jwt";
 
-const app = express();
+// Falla al arrancar (y no en el primer login) si falta JWT_SECRET en el .env.
+getJwtSecret();
+
+const app = createApp();
 const port = Number(process.env.PORT ?? 3000);
-
-app.use(cors());
-app.use(express.json());
-app.use(router);
 
 AppDataSource.initialize()
   .then(() => {
@@ -23,5 +21,3 @@ AppDataSource.initialize()
     console.error("Error initializing data source", error);
     process.exit(1);
   });
-
-export { app };

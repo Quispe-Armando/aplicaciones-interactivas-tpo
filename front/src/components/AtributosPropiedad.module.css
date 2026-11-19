@@ -1,0 +1,24 @@
+.atributos {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(11rem, 1fr));
+  gap: 0.75rem 1.5rem;
+  width: 100%;
+  margin: 0;
+}
+
+.atributos dt {
+  font-size: 0.85rem;
+  color: #666;
+}
+
+.atributos dd {
+  margin: 0;
+  font-weight: 600;
+}
+
+@media (max-width: 640px) {
+  .atributos {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.6rem 1rem;
+  }
+}

@@ -1,0 +1,11 @@
+.reporte {
+  padding: 1rem 1.25rem;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+}
+
+.reporte h2 {
+  margin-top: 0;
+  font-size: 1.1rem;
+}

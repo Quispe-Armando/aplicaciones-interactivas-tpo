@@ -1,0 +1,943 @@
+{
+  "password": "clave1234",
+  "accounts": [
+    {
+      "fullName": "Carla Oeste",
+      "email": "carla@demo.com",
+      "phone": "11-5555-1111",
+      "agency": {
+        "name": "Oeste Propiedades",
+        "description": "Inmobiliaria familiar con mas de 20 años en zona oeste y capital.",
+        "contactPhone": "11-4000-3333",
+        "officeAddress": "Av. Rivadavia 14000, Ramos Mejia"
+      },
+      "properties": [
+        {
+          "title": "Departamento 2 ambientes en Palermo",
+          "description": "Luminoso, con balcon al frente y cocina integrada. A dos cuadras del subte.",
+          "type": "APARTMENT",
+          "operation": "RENT",
+          "price": 650,
+          "currency": "USD",
+          "address": "Thames 1850",
+          "area": "Palermo",
+          "coveredAreaM2": 42,
+          "totalAreaM2": 46,
+          "rooms": 2,
+          "bedrooms": 1,
+          "bathrooms": 1,
+          "ageYears": 8,
+          "photos":[
+            "https://images.unsplash.com/photo-1668911494509-14baf3b42fda?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=NHwxMjA3fDA%3D", 
+            "https://images.unsplash.com/photo-1593696140826-c58b021acf8b?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=NHwxMjA3fDA%3D", 
+            "https://plus.unsplash.com/premium_photo-1670360414483-64e6d9ba9038?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=NHwxMjA3fDA%3D"
+          ],
+          "tags": [
+            "balcon",
+            "ascensor",
+            "pet-friendly"
+          ],
+          "timeline": [
+            {
+              "status": "DRAFT",
+              "daysAgo": 20
+            },
+            {
+              "status": "PUBLISHED",
+              "daysAgo": 18
+            }
+          ]
+        },
+        {
+          "title": "Casa con pileta en Ostende",
+          "description": "Casa de dos plantas con jardin, pileta y parrilla. Ideal para vivir todo el año.",
+          "type": "HOUSE",
+          "operation": "SALE",
+          "price": 185000,
+          "currency": "USD",
+          "address": "Calle 5 800",
+          "area": "Ostende",
+          "coveredAreaM2": 160,
+          "totalAreaM2": 420,
+          "rooms": 5,
+          "bedrooms": 3,
+          "bathrooms": 2,
+          "ageYears": 12,
+          "photos":[
+            "https://images.unsplash.com/photo-1580587771525-78b9dba3b914?q=80&w=1074&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=NHwxMjA3fDA%3D", 
+            "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=NHwxMjA3fDA%3D", 
+            "https://images.unsplash.com/photo-1560185127-6ed189bf02f4?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=NHwxMjA3fDA%3D"
+          ],
+          "tags": [
+            "pileta",
+            "cochera",
+            "parrilla",
+            "jardin"
+          ],
+          "timeline": [
+            {
+              "status": "DRAFT",
+              "daysAgo": 62
+            },
+            {
+              "status": "PUBLISHED",
+              "daysAgo": 60
+            }
+          ]
+        },
+        {
+          "title": "Departamento 3 ambientes en Belgrano",
+          "description": "Piso alto, vista abierta, dos baños. Cochera opcional.",
+          "type": "APARTMENT",
+          "operation": "SALE",
+          "price": 142000,
+          "currency": "USD",
+          "address": "Av. Cabildo 2300",
+          "area": "Belgrano",
+          "coveredAreaM2": 78,
+          "totalAreaM2": 85,
+          "rooms": 3,
+          "bedrooms": 2,
+          "bathrooms": 2,
+          "ageYears": 15,
+          "photos":[
+            "https://images.unsplash.com/photo-1668911494481-1643ee3e1235?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=NHwxMjA3fDA%3D", 
+            "https://images.unsplash.com/photo-1631888415289-f54436f81d8f?q=80&w=1055&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=NHwxMjA3fDA%3D", 
+            "https://images.unsplash.com/photo-1560185893-a55cbc8c57e8?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=NHwxMjA3fDA%3D"
+          ],
+          "tags": [
+            "balcon",
+            "ascensor",
+            "cochera"
+          ],
+          "timeline": [
+            {
+              "status": "DRAFT",
+              "daysAgo": 12
+            },
+            {
+              "status": "PUBLISHED",
+              "daysAgo": 10
+            },
+            {
+              "status": "PAUSED",
+              "daysAgo": 6
+            },
+            {
+              "status": "PUBLISHED",
+              "daysAgo": 4
+            }
+          ]
+        },
+        {
+          "title": "Local comercial en Microcentro",
+          "description": "Local a la calle con vidriera. Habilitado para gastronomia.",
+          "type": "COMMERCIAL",
+          "operation": "RENT",
+          "price": 900000,
+          "currency": "ARS",
+          "address": "Florida 450",
+          "area": "Microcentro",
+          "coveredAreaM2": 60,
+          "totalAreaM2": 60,
+          "bathrooms": 1,
+          "ageYears": 30,
+          "photos":[
+            "https://images.unsplash.com/photo-1520608421741-68228b76b6df?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=NHwxMjA3fDA%3D", 
+            "https://images.unsplash.com/photo-1560448205-17d3a46c84de?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=NHwxMjA3fDA%3D", 
+            "https://plus.unsplash.com/premium_photo-1661964475795-f0cb85767a88?q=80&w=1074&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=NHwxMjA3fDA%3D"
+          ],
+          "tags": [
+            "vidriera",
+            "habilitado"
+          ],
+          "timeline": [
+            {
+              "status": "DRAFT",
+              "daysAgo": 9
+            },
+            {
+              "status": "PUBLISHED",
+              "daysAgo": 8
+            }
+          ]
+        },
+        {
+          "title": "Terreno en Pilar",
+          "description": "Lote plano en barrio abierto, listo para construir.",
+          "type": "LAND",
+          "operation": "SALE",
+          "price": 60000,
+          "currency": "USD",
+          "address": "Ruta 8 km 52",
+          "area": "Pilar",
+          "totalAreaM2": 800,
+          "photos":[
+            "https://unicorn-images.b-cdn.net/1c318ff5-1550-47e9-aad6-270c30829845?optimizer=gif&width=1200&height=750",
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSS82Jacw-gQ1gRt-1g1EcwkxlSSzfb0iHfahXGPcl4Xjub-ZkmJQu-5uY&s=10", 
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT-xdjELmZwBhqwuZoTBs0yNQ0DOyaNs0m0aiA2wJTS7IqwI9bYeW99Q9YS&s=10"
+          ],
+          "tags": [
+            "escritura",
+            "servicios"
+          ],
+          "timeline": [
+            {
+              "status": "DRAFT",
+              "daysAgo": 3
+            },
+            {
+              "status": "PUBLISHED",
+              "daysAgo": 2
+            }
+          ]
+        },
+        {
+          "title": "PH en Villa Crespo",
+          "description": "PH al fondo con patio propio, sin expensas. Reservado.",
+          "type": "APARTMENT",
+          "operation": "SALE",
+          "price": 98000,
+          "currency": "USD",
+          "address": "Aguirre 700",
+          "area": "Villa Crespo",
+          "coveredAreaM2": 70,
+          "totalAreaM2": 90,
+          "rooms": 3,
+          "bedrooms": 2,
+          "bathrooms": 1,
+          "ageYears": 40,
+          "photos":[
+            "https://images.unsplash.com/photo-1678575326996-a1bf09b86158?q=80&w=1332&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=NHwxMjA3fDA%3D", 
+            "https://images.unsplash.com/photo-1713453328505-40d98b722b92?q=80&w=1171&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=NHwxMjA3fDA%3D", 
+            "https://images.unsplash.com/photo-1560184897-67f4a3f9a7fa?q=80&w=1171&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=NHwxMjA3fDA%3D"
+          ],
+          "tags": [
+            "patio",
+            "sin-expensas"
+          ],
+          "timeline": [
+            {
+              "status": "DRAFT",
+              "daysAgo": 35
+            },
+            {
+              "status": "PUBLISHED",
+              "daysAgo": 33
+            },
+            {
+              "status": "RESERVED",
+              "daysAgo": 5
+            }
+          ]
+        },
+        {
+          "title": "Casa en Tigre (pausada)",
+          "description": "Casa en alquiler con muelle propio. Pausada por refacciones.",
+          "type": "HOUSE",
+          "operation": "RENT",
+          "price": 1200000,
+          "currency": "ARS",
+          "address": "Rio Lujan 120",
+          "area": "Tigre",
+          "coveredAreaM2": 140,
+          "totalAreaM2": 500,
+          "rooms": 4,
+          "bedrooms": 3,
+          "bathrooms": 2,
+          "ageYears": 20,
+          "tags": [
+            "jardin",
+            "muelle"
+          ],
+          "timeline": [
+            {
+              "status": "DRAFT",
+              "daysAgo": 45
+            },
+            {
+              "status": "PUBLISHED",
+              "daysAgo": 44
+            },
+            {
+              "status": "PAUSED",
+              "daysAgo": 15
+            }
+          ]
+        },
+        {
+          "title": "Departamento en Recoleta (vendido)",
+          "description": "Departamento clasico con piso de madera.",
+          "type": "APARTMENT",
+          "operation": "SALE",
+          "price": 210000,
+          "currency": "USD",
+          "address": "Junin 1100",
+          "area": "Recoleta",
+          "coveredAreaM2": 95,
+          "totalAreaM2": 105,
+          "rooms": 4,
+          "bedrooms": 3,
+          "bathrooms": 2,
+          "ageYears": 60,
+          "tags": [
+            "ascensor",
+            "balcon"
+          ],
+          "timeline": [
+            {
+              "status": "DRAFT",
+              "daysAgo": 75
+            },
+            {
+              "status": "PUBLISHED",
+              "daysAgo": 70
+            },
+            {
+              "status": "RESERVED",
+              "daysAgo": 30
+            },
+            {
+              "status": "SOLD",
+              "daysAgo": 25
+            }
+          ]
+        },
+        {
+          "title": "Casa en Caballito (vendida)",
+          "description": "Casa reciclada a nuevo con terraza.",
+          "type": "HOUSE",
+          "operation": "SALE",
+          "price": 165000,
+          "currency": "USD",
+          "address": "Acoyte 300",
+          "area": "Caballito",
+          "coveredAreaM2": 130,
+          "totalAreaM2": 200,
+          "rooms": 5,
+          "bedrooms": 3,
+          "bathrooms": 2,
+          "ageYears": 25,
+          "tags": [
+            "terraza",
+            "parrilla"
+          ],
+          "timeline": [
+            {
+              "status": "DRAFT",
+              "daysAgo": 42
+            },
+            {
+              "status": "PUBLISHED",
+              "daysAgo": 40
+            },
+            {
+              "status": "RESERVED",
+              "daysAgo": 14
+            },
+            {
+              "status": "SOLD",
+              "daysAgo": 10
+            }
+          ]
+        },
+        {
+          "title": "Departamento en Almagro (alquilado)",
+          "description": "Monoambiente divisible, muy luminoso.",
+          "type": "APARTMENT",
+          "operation": "RENT",
+          "price": 420,
+          "currency": "USD",
+          "address": "Medrano 600",
+          "area": "Almagro",
+          "coveredAreaM2": 35,
+          "totalAreaM2": 38,
+          "rooms": 1,
+          "bedrooms": 1,
+          "bathrooms": 1,
+          "ageYears": 20,
+          "tags": [
+            "luminoso"
+          ],
+          "timeline": [
+            {
+              "status": "DRAFT",
+              "daysAgo": 52
+            },
+            {
+              "status": "PUBLISHED",
+              "daysAgo": 50
+            },
+            {
+              "status": "RESERVED",
+              "daysAgo": 38
+            },
+            {
+              "status": "RENTED",
+              "daysAgo": 35
+            }
+          ]
+        },
+        {
+          "title": "Casa en Lanus (cancelada)",
+          "description": "Casa a refaccionar. El dueño retiro la propiedad.",
+          "type": "HOUSE",
+          "operation": "SALE",
+          "price": 80000,
+          "currency": "USD",
+          "address": "Pellegrini 900",
+          "area": "Lanus",
+          "coveredAreaM2": 110,
+          "totalAreaM2": 250,
+          "rooms": 4,
+          "bedrooms": 2,
+          "bathrooms": 1,
+          "ageYears": 50,
+          "tags": [
+            "a-refaccionar"
+          ],
+          "timeline": [
+            {
+              "status": "DRAFT",
+              "daysAgo": 30
+            },
+            {
+              "status": "PUBLISHED",
+              "daysAgo": 28
+            },
+            {
+              "status": "PAUSED",
+              "daysAgo": 20
+            },
+            {
+              "status": "CANCELLED",
+              "daysAgo": 18
+            }
+          ]
+        },
+        {
+          "title": "Departamento en Flores (borrador)",
+          "description": "Todavia sin publicar.",
+          "type": "APARTMENT",
+          "operation": "SALE",
+          "price": 76000,
+          "currency": "USD",
+          "address": "Rivadavia 7000",
+          "area": "Flores",
+          "coveredAreaM2": 50,
+          "totalAreaM2": 55,
+          "rooms": 2,
+          "bedrooms": 1,
+          "bathrooms": 1,
+          "ageYears": 35,
+          "tags": [
+            "ascensor"
+          ],
+          "timeline": [
+            {
+              "status": "DRAFT",
+              "daysAgo": 1
+            }
+          ]
+        },
+        {
+          "title": "Terreno en Escobar (borrador)",
+          "description": "Todavia sin publicar.",
+          "type": "LAND",
+          "operation": "SALE",
+          "price": 35000,
+          "currency": "USD",
+          "address": "Ruta 25 km 10",
+          "area": "Escobar",
+          "totalAreaM2": 450,
+          "tags": [],
+          "timeline": [
+            {
+              "status": "DRAFT",
+              "daysAgo": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "fullName": "Pedro Sur",
+      "email": "pedro@demo.com",
+      "phone": "11-5555-2222",
+      "agency": {
+        "name": "Sur Inmuebles",
+        "description": "Especialistas en zona sur.",
+        "contactPhone": "11-4000-5555",
+        "officeAddress": "Av. Mitre 300, Avellaneda"
+      },
+      "properties": [
+        {
+          "title": "Departamento 2 ambientes en Quilmes",
+          "description": "A metros de la estacion.",
+          "type": "APARTMENT",
+          "operation": "RENT",
+          "price": 380,
+          "currency": "USD",
+          "address": "Rivadavia 250",
+          "area": "Quilmes",
+          "coveredAreaM2": 40,
+          "totalAreaM2": 44,
+          "rooms": 2,
+          "bedrooms": 1,
+          "bathrooms": 1,
+          "ageYears": 10,
+          "tags": [
+            "balcon",
+            "ascensor"
+          ],
+          "timeline": [
+            {
+              "status": "DRAFT",
+              "daysAgo": 15
+            },
+            {
+              "status": "PUBLISHED",
+              "daysAgo": 14
+            }
+          ]
+        },
+        {
+          "title": "Casa en Bernal",
+          "description": "Casa con fondo libre y quincho.",
+          "type": "HOUSE",
+          "operation": "SALE",
+          "price": 120000,
+          "currency": "USD",
+          "address": "Belgrano 1200",
+          "area": "Bernal",
+          "coveredAreaM2": 120,
+          "totalAreaM2": 300,
+          "rooms": 4,
+          "bedrooms": 3,
+          "bathrooms": 2,
+          "ageYears": 18,
+          "tags": [
+            "quincho",
+            "cochera",
+            "pileta"
+          ],
+          "timeline": [
+            {
+              "status": "DRAFT",
+              "daysAgo": 25
+            },
+            {
+              "status": "PUBLISHED",
+              "daysAgo": 24
+            }
+          ]
+        },
+        {
+          "title": "Terreno en Berazategui (pausado)",
+          "description": "Lote en esquina.",
+          "type": "LAND",
+          "operation": "SALE",
+          "price": 28000,
+          "currency": "USD",
+          "address": "Calle 14 y 150",
+          "area": "Berazategui",
+          "totalAreaM2": 400,
+          "tags": [
+            "esquina"
+          ],
+          "timeline": [
+            {
+              "status": "DRAFT",
+              "daysAgo": 20
+            },
+            {
+              "status": "PUBLISHED",
+              "daysAgo": 19
+            },
+            {
+              "status": "PAUSED",
+              "daysAgo": 7
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "fullName": "Valeria Norte",
+      "email": "valeria@demo.com",
+      "phone": "11-5555-3333",
+      "agency": {
+        "name": "Norte Hogar",
+        "description": "Propiedades premium en zona norte.",
+        "contactPhone": "11-4000-7777",
+        "officeAddress": "Av. Maipu 1500, Olivos"
+      },
+      "properties": [
+        {
+          "title": "Departamento en Vicente Lopez",
+          "description": "Vista al rio, amenities completos.",
+          "type": "APARTMENT",
+          "operation": "SALE",
+          "price": 230000,
+          "currency": "USD",
+          "address": "Libertador 1500",
+          "area": "Vicente Lopez",
+          "coveredAreaM2": 90,
+          "totalAreaM2": 100,
+          "rooms": 3,
+          "bedrooms": 2,
+          "bathrooms": 2,
+          "ageYears": 5,
+          "tags": [
+            "pileta",
+            "cochera",
+            "ascensor",
+            "balcon"
+          ],
+          "timeline": [
+            {
+              "status": "DRAFT",
+              "daysAgo": 11
+            },
+            {
+              "status": "PUBLISHED",
+              "daysAgo": 10
+            }
+          ]
+        },
+        {
+          "title": "Casa en San Isidro",
+          "description": "Casa con jardin amplio.",
+          "type": "HOUSE",
+          "operation": "RENT",
+          "price": 1800,
+          "currency": "USD",
+          "address": "Av. Centenario 800",
+          "area": "San Isidro",
+          "coveredAreaM2": 200,
+          "totalAreaM2": 600,
+          "rooms": 6,
+          "bedrooms": 4,
+          "bathrooms": 3,
+          "ageYears": 30,
+          "photo":[
+            "https://images.unsplash.com/photo-1639444184273-edd179bad79d?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=NHwxMjA3fDA%3D", 
+            "https://images.unsplash.com/photo-1569152811536-fb47aced8409?q=80&w=1169&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=NHwxMjA3fDA%3D", 
+            "https://images.unsplash.com/photo-1556020685-ae41abfc9365?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=NHwxMjA3fDA%3D"],
+          "tags": [
+            "jardin",
+            "pileta",
+            "parrilla"
+          ],
+          "timeline": [
+            {
+              "status": "DRAFT",
+              "daysAgo": 6
+            },
+            {
+              "status": "PUBLISHED",
+              "daysAgo": 5
+            }
+          ]
+        },
+        {
+          "title": "Casa con jardín en Martínez",
+          "description": "Casa de dos plantas con jardín, quincho y cochera para dos autos. A cuatro cuadras de la estación.",
+          "type": "HOUSE",
+          "operation": "SALE",
+          "price": 310000,
+          "currency": "USD",
+          "address": "Libertador 1200",
+          "area": "Martínez",
+          "coveredAreaM2": 190,
+          "totalAreaM2": 420,
+          "rooms": 5,
+          "bedrooms": 3,
+          "bathrooms": 3,
+          "ageYears": 15,
+          "tags": [
+            "jardin",
+            "quincho",
+            "cochera"
+          ],
+          "timeline": [
+            {
+              "status": "DRAFT",
+              "daysAgo": 9
+            },
+            {
+              "status": "PUBLISHED",
+              "daysAgo": 8
+            }
+          ]
+        },
+        {
+          "title": "Departamento 1 ambiente en San Isidro",
+          "description": "Monoambiente a estrenar, con amenities: SUM, gimnasio y terraza. Ideal para una persona.",
+          "type": "APARTMENT",
+          "operation": "RENT",
+          "price": 650000,
+          "currency": "ARS",
+          "address": "Belgrano 340",
+          "area": "San Isidro",
+          "coveredAreaM2": 30,
+          "totalAreaM2": 33,
+          "rooms": 1,
+          "bedrooms": 0,
+          "bathrooms": 1,
+          "ageYears": 0,
+          "photo":[
+            "https://plus.unsplash.com/premium_photo-1746888841424-f1504e856323?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=NHwxMjA3fDA%3D",
+            "https://images.unsplash.com/photo-1556912173-3bb406ef7e77?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=NHwxMjA3fDA%3D",
+            "https://images.unsplash.com/photo-1554995207-c18c203602cb?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=NHwxMjA3fDA%3D"
+          ],
+          "tags": [
+            "gimnasio",
+            "sum",
+            "terraza"
+          ],
+          "timeline": [
+            {
+              "status": "DRAFT",
+              "daysAgo": 7
+            },
+            {
+              "status": "PUBLISHED",
+              "daysAgo": 6
+            }
+          ]
+        },
+        {
+          "title": "Terreno en Pacheco",
+          "description": "Lote de esquina en barrio cerrado, con servicios y escritura inmediata.",
+          "type": "LAND",
+          "operation": "SALE",
+          "price": 45000,
+          "currency": "USD",
+          "address": "Ruta 202 km 38",
+          "area": "Pacheco",
+          "totalAreaM2": 600,
+          "photo":[
+            "https://www.alta-patagonia.com.ar/wp-content/uploads/2024/12/WhatsApp-Image-2024-12-17-at-12.12.01-3-525x328.jpeg", 
+            "https://imgar.zonapropcdn.com/avisos/1/00/49/91/59/45/720x532/2007408902.jpg?isFirstImage=true", 
+            "https://d1acdg20u0pmxj.cloudfront.net/listings/4c151864-29e0-4124-8d0d-94abafb1508c/860x440/a13023f7-8fc7-441f-998e-322cc5c8a882.jpg"
+          ],
+          "tags": [
+            "escritura",
+            "servicios",
+            "barrio cerrado"
+          ],
+          "timeline": [
+            {
+              "status": "DRAFT",
+              "daysAgo": 4
+            },
+            {
+              "status": "PUBLISHED",
+              "daysAgo": 3
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "comments": [
+    {
+      "property": "Departamento 2 ambientes en Palermo",
+      "authorName": "Ana",
+      "content": "¿Admite mascotas?",
+      "reply": "Sí, admite mascotas chicas.",
+      "daysAgo": 6
+    },
+    {
+      "property": "Departamento 2 ambientes en Palermo",
+      "authorName": "Luis",
+      "content": "¿Las expensas incluyen agua?",
+      "reply": null,
+      "daysAgo": 1
+    },
+    {
+      "property": "Casa con pileta en Ostende",
+      "authorName": "Sofía",
+      "content": "¿Se puede financiar?",
+      "reply": null,
+      "daysAgo": 4
+    },
+    {
+      "property": "Casa con pileta en Ostende",
+      "authorName": "Martín",
+      "content": "¿Cuántos autos entran en la cochera?",
+      "reply": "Entran dos autos.",
+      "daysAgo": 3
+    },
+    {
+      "property": "Departamento 3 ambientes en Belgrano",
+      "authorName": "Pablo",
+      "content": "¿Tiene balcón?",
+      "reply": null,
+      "daysAgo": 2
+    },
+    {
+      "property": "Departamento en Recoleta (vendido)",
+      "authorName": "Carolina",
+      "content": "¿Sigue disponible?",
+      "reply": "Ya está reservada, gracias.",
+      "daysAgo": 27
+    },
+    {
+      "property": "Casa en Bernal",
+      "authorName": "Esteban",
+      "content": "¿Aceptan permuta?",
+      "reply": null,
+      "daysAgo": 5
+    },
+    {
+      "property": "Departamento en Vicente Lopez",
+      "authorName": "Irene",
+      "content": "¿Las expensas son altas?",
+      "reply": null,
+      "daysAgo": 2
+    }
+  ],
+  "visits": [
+    {
+      "property": "Casa con pileta en Ostende",
+      "requesterName": "Mariana Paz",
+      "requesterPhone": "11-4444-1000",
+      "proposedIn": 3,
+      "message": "Puedo después de las 15hs.",
+      "status": "CONFIRMED",
+      "daysAgo": 5
+    },
+    {
+      "property": "Casa con pileta en Ostende",
+      "requesterName": "Diego Ruiz",
+      "requesterPhone": "11-4444-2000",
+      "proposedIn": 6,
+      "message": null,
+      "status": "PENDING",
+      "daysAgo": 1
+    },
+    {
+      "property": "Departamento 2 ambientes en Palermo",
+      "requesterName": "Sol Benitez",
+      "requesterPhone": "11-4444-3000",
+      "proposedIn": 2,
+      "message": "Vamos dos personas.",
+      "status": "PENDING",
+      "daysAgo": 2
+    },
+    {
+      "property": "Departamento 2 ambientes en Palermo",
+      "requesterName": "Hugo Salas",
+      "requesterPhone": "11-4444-4000",
+      "proposedIn": -8,
+      "message": null,
+      "status": "REJECTED",
+      "daysAgo": 9
+    },
+    {
+      "property": "Departamento 3 ambientes en Belgrano",
+      "requesterName": "Julieta Vega",
+      "requesterPhone": "11-4444-5000",
+      "proposedIn": 4,
+      "message": null,
+      "status": "PENDING",
+      "daysAgo": 1
+    },
+    {
+      "property": "Casa en Caballito (vendida)",
+      "requesterName": "Lucas Mora",
+      "requesterPhone": "11-4444-6000",
+      "proposedIn": -20,
+      "message": null,
+      "status": "COMPLETED",
+      "daysAgo": 25
+    },
+    {
+      "property": "Departamento en Recoleta (vendido)",
+      "requesterName": "Nora Díaz",
+      "requesterPhone": "11-4444-7000",
+      "proposedIn": -45,
+      "message": "Me interesa mucho.",
+      "status": "COMPLETED",
+      "daysAgo": 50
+    },
+    {
+      "property": "Departamento en Vicente Lopez",
+      "requesterName": "Tomás Ibarra",
+      "requesterPhone": "11-4444-8000",
+      "proposedIn": 5,
+      "message": null,
+      "status": "PENDING",
+      "daysAgo": 3
+    },
+    {
+      "property": "Departamento 3 ambientes en Belgrano",
+      "requesterName": "Julián Costa",
+      "requesterPhone": "11-4444-1010",
+      "proposedIn": 7,
+      "message": "Surgió un imprevisto, pido cancelar la visita.",
+      "status": "CANCELLED",
+      "daysAgo": 4
+    }
+  ],
+  "reviews": [
+    {
+      "agency": "Oeste Propiedades",
+      "authorName": "Lucía",
+      "content": "Muy buena atención, respondieron todo rápido.",
+      "rating": 5,
+      "daysAgo": 40
+    },
+    {
+      "agency": "Oeste Propiedades",
+      "authorName": "Marcos",
+      "content": "Correcto, pero tardaron en confirmar la visita.",
+      "rating": 3,
+      "daysAgo": 30
+    },
+    {
+      "agency": "Oeste Propiedades",
+      "authorName": "Camila",
+      "content": "Muy amables y transparentes con los gastos.",
+      "rating": 4,
+      "daysAgo": 20
+    },
+    {
+      "agency": "Oeste Propiedades",
+      "authorName": "Julián",
+      "content": "Excelente, vendí mi departamento en poco tiempo.",
+      "rating": 5,
+      "daysAgo": 7
+    },
+    {
+      "agency": "Oeste Propiedades",
+      "authorName": "Rosa",
+      "content": "Buena experiencia en general.",
+      "rating": 4,
+      "daysAgo": 3
+    },
+    {
+      "agency": "Sur Inmuebles",
+      "authorName": "Tomás",
+      "content": "Demoraron mucho en contestar.",
+      "rating": 2,
+      "daysAgo": 12
+    },
+    {
+      "agency": "Sur Inmuebles",
+      "authorName": "Elena",
+      "content": "Me ayudaron con todos los trámites.",
+      "rating": 4,
+      "daysAgo": 6
+    },
+    {
+      "agency": "Norte Hogar",
+      "authorName": "Gustavo",
+      "content": "Atención de primer nivel.",
+      "rating": 5,
+      "daysAgo": 8
+    }
+  ]
+}

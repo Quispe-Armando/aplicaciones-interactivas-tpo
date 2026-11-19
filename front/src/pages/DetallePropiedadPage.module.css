@@ -1,0 +1,31 @@
+.detalle {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1rem;
+}
+/*
+.detalle > * {
+  max-width: 100%;
+}
+*/
+.detalle h1 {
+  margin: 0;
+}
+
+.precio {
+  margin: 0.25rem 0;
+  font-size: 1.4rem;
+  font-weight: 700;
+}
+
+.avisoEstado {
+  padding: 0.4rem 0.75rem;
+  background: #fff3cd;
+  border-radius: 6px;
+}
+
+.descripcion {
+  margin: 0;
+  white-space: pre-line;
+}

@@ -1,0 +1,1323 @@
+@base = http://localhost:3000
+
+# Requests de prueba para TODOS los endpoints de la API. Se usan con la extension "REST Client" de VS Code
+# (o se copian a Thunder Client / Postman). Probalas de arriba hacia abajo.
+#
+# Punto de partida: base vacia (solo migraciones) o con el seed (npm run seed).
+#   - Con el seed, los registros de Carla y Pedro de abajo responden 409 (ya existen): es lo esperado,
+#     y los logins siguen funcionando (contraseña clave1234). Las inmobiliarias quedan con id 1 (Carla) y 2 (Pedro).
+#   - Cada seccion crea sus propios datos, asi que se puede correr sobre el seed sin romper nada.
+#   - La seccion "Inmobiliaria: perfil y ABM" BORRA la inmobiliaria de Pedro (id 2). Su token sigue sirviendo para
+#     probar los 403 de las secciones siguientes, pero ya no tiene inmobiliaria propia. Para recuperarla: npm run seed.
+
+# ─────────────────────────────────────────────
+# Health
+# ─────────────────────────────────────────────
+
+### Debe responder 200 { "status": "ok" }
+GET {{base}}/health
+
+# ─────────────────────────────────────────────
+# Autenticacion del vendedor
+# ─────────────────────────────────────────────
+
+### Registro: crea el Seller y su Agency en el mismo paso -> 201
+POST {{base}}/auth/register
+Content-Type: application/json
+
+{
+  "fullName": "Carla Oeste",
+  "email": "carla@demo.com",
+  "password": "clave1234",
+  "phone": "11-5555-1111",
+  "agency": { "name": "Oeste Propiedades", "contactPhone": "11-4000-3333" }
+}
+
+### Mismo email otra vez -> 409
+POST {{base}}/auth/register
+Content-Type: application/json
+
+{
+  "fullName": "Otra Persona",
+  "email": "carla@demo.com",
+  "password": "clave1234",
+  "agency": { "name": "Otra Inmobiliaria", "contactPhone": "11-4000-4444" }
+}
+
+### Mismo nombre de fantasia con otro email -> 409
+POST {{base}}/auth/register
+Content-Type: application/json
+
+{
+  "fullName": "Otra Persona",
+  "email": "otra@demo.com",
+  "password": "clave1234",
+  "agency": { "name": "Oeste Propiedades", "contactPhone": "11-4000-4444" }
+}
+
+### Body invalido (nombre vacio, email mal escrito, password corta, sin inmobiliaria) -> 400 con el campo que fallo
+POST {{base}}/auth/register
+Content-Type: application/json
+
+{
+  "fullName": "",
+  "email": "esto-no-es-un-email",
+  "password": "123"
+}
+
+### Login correcto -> 200 { token, seller, agency }
+# @name login
+POST {{base}}/auth/login
+Content-Type: application/json
+
+{ "email": "carla@demo.com", "password": "clave1234" }
+
+### Password incorrecta -> 401
+POST {{base}}/auth/login
+Content-Type: application/json
+
+{ "email": "carla@demo.com", "password": "otra-clave" }
+
+### Email que no existe -> 401 (mismo mensaje que arriba)
+POST {{base}}/auth/login
+Content-Type: application/json
+
+{ "email": "nadie@demo.com", "password": "clave1234" }
+
+### Quien soy, con token -> 200 { seller, agency }
+GET {{base}}/auth/me
+Authorization: Bearer {{login.response.body.token}}
+
+### Sin token -> 401
+GET {{base}}/auth/me
+
+### Token inventado -> 401
+GET {{base}}/auth/me
+Authorization: Bearer esto.no.es-un-token
+
+# ─────────────────────────────────────────────
+# Inmobiliaria: perfil y ABM
+# (Correr primero el registro y el login de arriba. Reemplazar el 1 por el id de tu inmobiliaria.)
+# ─────────────────────────────────────────────
+
+### Perfil publico, sin token -> 200 (sin datos del vendedor: ni email del vendedor ni password)
+GET {{base}}/agencies/1
+
+### Inmobiliaria inexistente -> 404
+GET {{base}}/agencies/9999
+
+### Id invalido -> 400
+GET {{base}}/agencies/abc
+
+### Editar el perfil siendo el dueño (PUT reemplaza todo: se mandan todos los campos) -> 200
+PUT {{base}}/agencies/1
+Authorization: Bearer {{login.response.body.token}}
+Content-Type: application/json
+
+{
+  "name": "Oeste Propiedades",
+  "description": "Inmobiliaria familiar con 20 años en zona oeste.",
+  "logoUrl": "https://example.com/logo.png",
+  "contactPhone": "11-4000-3333",
+  "contactEmail": "contacto@oeste.com",
+  "officeAddress": "Av. Rivadavia 1234, Ramos Mejía"
+}
+
+### Body invalido (nombre vacio, email mal escrito) -> 400 con el campo que fallo
+PUT {{base}}/agencies/1
+Authorization: Bearer {{login.response.body.token}}
+Content-Type: application/json
+
+{ "name": "", "description": "x", "contactPhone": "11-4000-3333", "contactEmail": "no-es-email" }
+
+### Editar sin token -> 401
+PUT {{base}}/agencies/1
+Content-Type: application/json
+
+{ "name": "Oeste Propiedades", "description": "x", "contactPhone": "1", "contactEmail": "a@b.com" }
+
+### Propiedades publicadas de la inmobiliaria (publico, paginado) -> 200 { items, page, limit, total }
+GET {{base}}/agencies/1/properties?page=1&limit=10
+
+### Inmobiliaria inexistente -> 404
+GET {{base}}/agencies/9999/properties
+
+### Para probar el 403: registrar una SEGUNDA inmobiliaria, loguearse con ella y editar/borrar la 1
+POST {{base}}/auth/register
+Content-Type: application/json
+
+{
+  "fullName": "Pedro Sur",
+  "email": "pedro@demo.com",
+  "password": "clave1234",
+  "agency": { "name": "Sur Inmuebles", "contactPhone": "11-4000-5555" }
+}
+
+###
+# @name loginPedro
+POST {{base}}/auth/login
+Content-Type: application/json
+
+{ "email": "pedro@demo.com", "password": "clave1234" }
+
+### Pedro intenta editar la inmobiliaria 1 -> 403
+PUT {{base}}/agencies/1
+Authorization: Bearer {{loginPedro.response.body.token}}
+Content-Type: application/json
+
+{ "name": "Hackeada", "description": "x", "contactPhone": "1", "contactEmail": "a@b.com" }
+
+### Pedro intenta borrar la inmobiliaria 1 -> 403
+DELETE {{base}}/agencies/1
+Authorization: Bearer {{loginPedro.response.body.token}}
+
+### Pedro edita con el nombre de otra inmobiliaria (la suya es la 2) -> 409
+PUT {{base}}/agencies/2
+Authorization: Bearer {{loginPedro.response.body.token}}
+Content-Type: application/json
+
+{ "name": "Oeste Propiedades", "description": "x", "contactPhone": "1", "contactEmail": "a@b.com" }
+
+### Pedro elimina SU inmobiliaria (sin propiedades publicadas/reservadas) -> 204 sin body
+# Despues, /auth/me con su token da 401 porque la cuenta ya no existe.
+DELETE {{base}}/agencies/2
+Authorization: Bearer {{loginPedro.response.body.token}}
+
+### Con la cuenta borrada, el token ya no sirve -> 401
+GET {{base}}/auth/me
+Authorization: Bearer {{loginPedro.response.body.token}}
+
+### El caso 409 de borrar con propiedades publicadas se prueba mas abajo, en la seccion de Propiedades.
+
+# ─────────────────────────────────────────────
+# Propiedades: ABM y busqueda
+# Usar el token de Carla ("login" de arriba). Si ya borraste su inmobiliaria en la seccion anterior,
+# volve a correr el registro y el login de Carla.
+# ─────────────────────────────────────────────
+
+### Crear un departamento en alquiler -> 201, status DRAFT (aunque mandes otro estado, se ignora)
+# @name prop1
+POST {{base}}/properties
+Authorization: Bearer {{login.response.body.token}}
+Content-Type: application/json
+
+{
+  "title": "Depto 2 amb con vista",
+  "description": "Luminoso, a una cuadra del subte.",
+  "type": "APARTMENT",
+  "operation": "RENT",
+  "price": 400,
+  "currency": "USD",
+  "address": "Av. Corrientes 1234",
+  "area": "Centro",
+  "coveredAreaM2": 40,
+  "totalAreaM2": 45,
+  "rooms": 2,
+  "bedrooms": 1,
+  "bathrooms": 1,
+  "ageYears": 10,
+  "tags": ["Pileta", "balcón"],
+  "images": [
+    { "url": "https://example.com/depto-1.jpg", "isCover": true },
+    { "url": "https://example.com/depto-2.jpg", "isCover": false }
+  ],
+  "status": "PUBLISHED"
+}
+
+### Crear una casa en venta con pileta y cochera -> 201
+# @name prop2
+POST {{base}}/properties
+Authorization: Bearer {{login.response.body.token}}
+Content-Type: application/json
+
+{
+  "title": "Casa con pileta",
+  "description": "Casa de dos plantas con jardin y parrilla.",
+  "type": "HOUSE",
+  "operation": "SALE",
+  "price": 120000,
+  "currency": "USD",
+  "address": "Calle 5 800",
+  "area": "Ostende",
+  "coveredAreaM2": 150,
+  "totalAreaM2": 400,
+  "rooms": 5,
+  "bedrooms": 3,
+  "bathrooms": 2,
+  "tags": ["pileta", "cochera", "parrilla"],
+  "images": [{ "url": "https://example.com/casa-1.jpg", "isCover": true }]
+}
+
+### Crear un terreno en venta (sin superficie cubierta ni ambientes) -> 201
+# @name prop3
+POST {{base}}/properties
+Authorization: Bearer {{login.response.body.token}}
+Content-Type: application/json
+
+{
+  "title": "Terreno en esquina",
+  "description": "Lote plano listo para construir.",
+  "type": "LAND",
+  "operation": "SALE",
+  "price": 45000,
+  "currency": "USD",
+  "address": "Ruta 11 km 5",
+  "area": "Ostende",
+  "totalAreaM2": 600,
+  "images": [{ "url": "https://example.com/terreno-1.jpg", "isCover": true }]
+}
+
+### Precio 0 -> 400 (details dice que el campo es price)
+POST {{base}}/properties
+Authorization: Bearer {{login.response.body.token}}
+Content-Type: application/json
+
+{
+  "title": "Precio invalido", "description": "x", "type": "HOUSE", "operation": "SALE",
+  "price": 0, "currency": "USD", "address": "x", "area": "x", "totalAreaM2": 50,
+  "images": [{ "url": "https://example.com/a.jpg", "isCover": true }]
+}
+
+### Superficie total negativa -> 400
+POST {{base}}/properties
+Authorization: Bearer {{login.response.body.token}}
+Content-Type: application/json
+
+{
+  "title": "Superficie invalida", "description": "x", "type": "HOUSE", "operation": "SALE",
+  "price": 100, "currency": "USD", "address": "x", "area": "x", "totalAreaM2": -5,
+  "images": [{ "url": "https://example.com/a.jpg", "isCover": true }]
+}
+
+### Sin fotos -> 400
+POST {{base}}/properties
+Authorization: Bearer {{login.response.body.token}}
+Content-Type: application/json
+
+{
+  "title": "Sin fotos", "description": "x", "type": "HOUSE", "operation": "SALE",
+  "price": 100, "currency": "USD", "address": "x", "area": "x", "totalAreaM2": 50,
+  "images": []
+}
+
+### Dos portadas -> 400
+POST {{base}}/properties
+Authorization: Bearer {{login.response.body.token}}
+Content-Type: application/json
+
+{
+  "title": "Dos portadas", "description": "x", "type": "HOUSE", "operation": "SALE",
+  "price": 100, "currency": "USD", "address": "x", "area": "x", "totalAreaM2": 50,
+  "images": [
+    { "url": "https://example.com/a.jpg", "isCover": true },
+    { "url": "https://example.com/b.jpg", "isCover": true }
+  ]
+}
+
+### Terreno con ambientes -> 400 ("No aplica a un terreno")
+POST {{base}}/properties
+Authorization: Bearer {{login.response.body.token}}
+Content-Type: application/json
+
+{
+  "title": "Terreno con ambientes", "description": "x", "type": "LAND", "operation": "SALE",
+  "price": 100, "currency": "USD", "address": "x", "area": "x", "totalAreaM2": 50, "rooms": 3,
+  "images": [{ "url": "https://example.com/a.jpg", "isCover": true }]
+}
+
+### Crear sin token -> 401
+POST {{base}}/properties
+Content-Type: application/json
+
+{}
+
+### Detalle publico de un borrador -> 404 (todavia no esta publicada)
+GET {{base}}/properties/{{prop1.response.body.id}}
+
+### Mis propiedades (con token): ve los borradores -> 200 { items, page, limit, total }
+GET {{base}}/agencies/me/properties
+Authorization: Bearer {{login.response.body.token}}
+
+### Mis propiedades filtradas por estado
+GET {{base}}/agencies/me/properties?status=DRAFT&page=1&limit=2
+Authorization: Bearer {{login.response.body.token}}
+
+### Una propiedad propia por id, incluso en borrador (la usa el formulario de edicion del front)
+GET {{base}}/agencies/me/properties/1
+Authorization: Bearer {{login.response.body.token}}
+
+### Listado publico: todavia vacio porque no hay ninguna PUBLISHED -> 200 con total 0
+GET {{base}}/properties
+
+### Editar (PUT completo) siendo el dueño -> 200
+PUT {{base}}/properties/{{prop1.response.body.id}}
+Authorization: Bearer {{login.response.body.token}}
+Content-Type: application/json
+
+{
+  "title": "Depto 2 amb con vista al rio",
+  "description": "Luminoso, a una cuadra del subte. Recien pintado.",
+  "type": "APARTMENT",
+  "operation": "RENT",
+  "price": 420,
+  "currency": "USD",
+  "address": "Av. Corrientes 1234",
+  "area": "Centro",
+  "coveredAreaM2": 40,
+  "totalAreaM2": 45,
+  "rooms": 2,
+  "bedrooms": 1,
+  "bathrooms": 1,
+  "ageYears": 10,
+  "tags": ["pileta", "balcón"],
+  "images": [{ "url": "https://example.com/depto-1.jpg", "isCover": true }]
+}
+
+### Editar con precio negativo -> 400
+PUT {{base}}/properties/{{prop1.response.body.id}}
+Authorization: Bearer {{login.response.body.token}}
+Content-Type: application/json
+
+{
+  "title": "x", "description": "x", "type": "APARTMENT", "operation": "RENT", "price": -1, "currency": "USD",
+  "address": "x", "area": "x", "totalAreaM2": 45,
+  "images": [{ "url": "https://example.com/a.jpg", "isCover": true }]
+}
+
+### Editar una que no existe -> 404
+PUT {{base}}/properties/9999
+Authorization: Bearer {{login.response.body.token}}
+Content-Type: application/json
+
+{
+  "title": "x", "description": "x", "type": "HOUSE", "operation": "SALE", "price": 1, "currency": "USD",
+  "address": "x", "area": "x", "totalAreaM2": 45,
+  "images": [{ "url": "https://example.com/a.jpg", "isCover": true }]
+}
+
+### Editar de otro vendedor -> 403 (Pedro intenta editar la de Carla; requiere el login de Pedro de la seccion anterior)
+# Si borraste a Pedro, volve a registrarlo y a loguearlo.
+PUT {{base}}/properties/{{prop1.response.body.id}}
+Authorization: Bearer {{loginPedro.response.body.token}}
+Content-Type: application/json
+
+{
+  "title": "x", "description": "x", "type": "HOUSE", "operation": "SALE", "price": 1, "currency": "USD",
+  "address": "x", "area": "x", "totalAreaM2": 45,
+  "images": [{ "url": "https://example.com/a.jpg", "isCover": true }]
+}
+
+### Eliminar un borrador -> 204 (se borra la prop3, el terreno)
+DELETE {{base}}/properties/{{prop3.response.body.id}}
+Authorization: Bearer {{login.response.body.token}}
+
+### Eliminar de otro vendedor -> 403
+DELETE {{base}}/properties/{{prop2.response.body.id}}
+Authorization: Bearer {{loginPedro.response.body.token}}
+
+# ═════════════════════════════════════════════
+# PAUSA: para seguir hay que PUBLICAR las propiedades. Todavia no hay endpoint de estados (Tarea 6),
+# asi que en pgAdmin (Query Tool sobre tpo_inmobiliario) corre back/dev-sql/publicar-borradores.sql
+# ═════════════════════════════════════════════
+
+### Listado publico, sin filtros -> 200, las publicadas (la mas nueva primero), con total/page/limit
+GET {{base}}/properties
+
+### Detalle publico, ahora si -> 200 con galeria e inmobiliaria (sin datos del vendedor)
+GET {{base}}/properties/{{prop1.response.body.id}}
+
+### Filtro por tipo -> solo la casa
+GET {{base}}/properties?type=HOUSE
+
+### Tipo + operacion -> solo departamentos en alquiler
+GET {{base}}/properties?type=APARTMENT&operation=RENT
+
+### Rango de precio (en USD) -> solo la casa
+GET {{base}}/properties?currency=USD&minPrice=100000&maxPrice=200000
+
+### Zona (parcial, sin importar mayusculas) -> la casa
+GET {{base}}/properties?area=osten
+
+### Ambientes exactos -> el depto
+GET {{base}}/properties?rooms=2
+
+### Amenities: tiene que tener todas -> solo la casa
+GET {{base}}/properties?amenities=pileta,cochera
+
+### Amenities: pileta la tienen el depto y la casa
+GET {{base}}/properties?amenities=pileta
+
+### Texto libre en titulo o descripcion -> la casa (por "parrilla")
+GET {{base}}/properties?q=parrilla
+
+### Orden por precio ascendente
+GET {{base}}/properties?sort=price&order=asc
+
+### Orden por superficie total descendente
+GET {{base}}/properties?sort=totalArea&order=desc
+
+### Paginado de a 1 -> items con 1 elemento, total con la cantidad real
+GET {{base}}/properties?page=2&limit=1
+
+### Combinado: casas en venta con pileta, mas baratas primero
+GET {{base}}/properties?type=HOUSE&operation=SALE&amenities=pileta&sort=price&order=asc
+
+### Filtro invalido -> 400
+GET {{base}}/properties?type=CASTILLO
+
+### Ordenar por un campo no permitido -> 400
+GET {{base}}/properties?sort=password
+
+### Sin resultados -> 200 con items vacio y total 0
+GET {{base}}/properties?q=zzzzzz
+
+### Propiedades publicadas de la inmobiliaria 1 (Tarea 4), ahora con datos
+GET {{base}}/agencies/1/properties
+
+### Eliminar una publicada -> 409 (solo se eliminan borradores)
+DELETE {{base}}/properties/{{prop2.response.body.id}}
+Authorization: Bearer {{login.response.body.token}}
+
+### Borrar la inmobiliaria con propiedades publicadas -> 409 (el caso pendiente de la Tarea 4)
+DELETE {{base}}/agencies/1
+Authorization: Bearer {{login.response.body.token}}
+
+# ═════════════════════════════════════════════
+# Para probar el bloqueo de edicion por estado: en pgAdmin correr back/dev-sql/marcar-vendida.sql
+# (marca la propiedad 1 como SOLD) y despues probar el request de abajo.
+# ═════════════════════════════════════════════
+
+### Editar una propiedad vendida -> 409
+PUT {{base}}/properties/1
+Authorization: Bearer {{login.response.body.token}}
+Content-Type: application/json
+
+{
+  "title": "x", "description": "x", "type": "APARTMENT", "operation": "RENT", "price": 1, "currency": "USD",
+  "address": "x", "area": "x", "totalAreaM2": 45,
+  "images": [{ "url": "https://example.com/a.jpg", "isCover": true }]
+}
+
+# ─────────────────────────────────────────────
+# Estados de la propiedad (maquina de estados) e historial
+# Ahora las propiedades se publican por la API: ya no hace falta dev-sql/publicar-borradores.sql.
+# ─────────────────────────────────────────────
+
+### Crear un alquiler para probar los estados -> 201 DRAFT (y el historial arranca con null -> DRAFT)
+# @name t6
+POST {{base}}/properties
+Authorization: Bearer {{login.response.body.token}}
+Content-Type: application/json
+
+{
+  "title": "PH al frente en alquiler",
+  "description": "Para probar los estados.",
+  "type": "APARTMENT",
+  "operation": "RENT",
+  "price": 600,
+  "currency": "USD",
+  "address": "Honduras 4000",
+  "area": "Palermo",
+  "totalAreaM2": 60,
+  "images": [{ "url": "https://example.com/ph.jpg", "isCover": true }]
+}
+
+### Borrador -> Vendida: transicion invalida -> 400 con las opciones permitidas
+PATCH {{base}}/properties/{{t6.response.body.id}}/status
+Authorization: Bearer {{login.response.body.token}}
+Content-Type: application/json
+
+{ "status": "SOLD" }
+
+### Borrador -> Cancelada: invalida (un borrador se elimina, no se cancela) -> 400
+PATCH {{base}}/properties/{{t6.response.body.id}}/status
+Authorization: Bearer {{login.response.body.token}}
+Content-Type: application/json
+
+{ "status": "CANCELLED" }
+
+### Estado que no existe -> 400
+PATCH {{base}}/properties/{{t6.response.body.id}}/status
+Authorization: Bearer {{login.response.body.token}}
+Content-Type: application/json
+
+{ "status": "VOLADA" }
+
+### Sin token -> 401
+PATCH {{base}}/properties/{{t6.response.body.id}}/status
+Content-Type: application/json
+
+{ "status": "PUBLISHED" }
+
+### De otro vendedor (Pedro) -> 403 (requiere el login de Pedro; si lo borraste, registralo de nuevo)
+PATCH {{base}}/properties/{{t6.response.body.id}}/status
+Authorization: Bearer {{loginPedro.response.body.token}}
+Content-Type: application/json
+
+{ "status": "PUBLISHED" }
+
+### Propiedad que no existe -> 404
+PATCH {{base}}/properties/9999/status
+Authorization: Bearer {{login.response.body.token}}
+Content-Type: application/json
+
+{ "status": "PUBLISHED" }
+
+### Borrador -> Publicada: OK -> 200, publishedAt con la fecha de ahora
+PATCH {{base}}/properties/{{t6.response.body.id}}/status
+Authorization: Bearer {{login.response.body.token}}
+Content-Type: application/json
+
+{ "status": "PUBLISHED" }
+
+### Ahora aparece en el listado publico y en su detalle
+GET {{base}}/properties/{{t6.response.body.id}}
+
+### Publicada -> Publicada: no es un cambio -> 400
+PATCH {{base}}/properties/{{t6.response.body.id}}/status
+Authorization: Bearer {{login.response.body.token}}
+Content-Type: application/json
+
+{ "status": "PUBLISHED" }
+
+### Publicada -> Pausada -> 200 (deja de aparecer en el listado publico)
+PATCH {{base}}/properties/{{t6.response.body.id}}/status
+Authorization: Bearer {{login.response.body.token}}
+Content-Type: application/json
+
+{ "status": "PAUSED" }
+
+### Pausada -> Publicada -> 200 (publishedAt NO cambia: sigue siendo la de la primera vez)
+PATCH {{base}}/properties/{{t6.response.body.id}}/status
+Authorization: Bearer {{login.response.body.token}}
+Content-Type: application/json
+
+{ "status": "PUBLISHED" }
+
+### Publicada -> Reservada -> 200
+PATCH {{base}}/properties/{{t6.response.body.id}}/status
+Authorization: Bearer {{login.response.body.token}}
+Content-Type: application/json
+
+{ "status": "RESERVED" }
+
+### Reservada -> Vendida, pero es un ALQUILER -> 400 (le corresponde RENTED)
+PATCH {{base}}/properties/{{t6.response.body.id}}/status
+Authorization: Bearer {{login.response.body.token}}
+Content-Type: application/json
+
+{ "status": "SOLD" }
+
+### Reservada -> Alquilada -> 200
+PATCH {{base}}/properties/{{t6.response.body.id}}/status
+Authorization: Bearer {{login.response.body.token}}
+Content-Type: application/json
+
+{ "status": "RENTED" }
+
+### Alquilada es un estado final: no se sale -> 400
+PATCH {{base}}/properties/{{t6.response.body.id}}/status
+Authorization: Bearer {{login.response.body.token}}
+Content-Type: application/json
+
+{ "status": "PUBLISHED" }
+
+### Y ya no se edita -> 409 (regla de la Tarea 5)
+PUT {{base}}/properties/{{t6.response.body.id}}
+Authorization: Bearer {{login.response.body.token}}
+Content-Type: application/json
+
+{
+  "title": "x", "description": "x", "type": "APARTMENT", "operation": "RENT", "price": 1, "currency": "USD",
+  "address": "x", "area": "x", "totalAreaM2": 45,
+  "images": [{ "url": "https://example.com/a.jpg", "isCover": true }]
+}
+
+### Historial completo, del mas viejo al mas nuevo -> 200
+# Esperado: null->DRAFT, DRAFT->PUBLISHED, PUBLISHED->PAUSED, PAUSED->PUBLISHED, PUBLISHED->RESERVED, RESERVED->RENTED
+# (los intentos invalidos de arriba NO dejan registro)
+GET {{base}}/properties/{{t6.response.body.id}}/status-history
+Authorization: Bearer {{login.response.body.token}}
+
+### Historial de otro vendedor -> 403
+GET {{base}}/properties/{{t6.response.body.id}}/status-history
+Authorization: Bearer {{loginPedro.response.body.token}}
+
+### Historial sin token -> 401
+GET {{base}}/properties/{{t6.response.body.id}}/status-history
+
+### Cancelar desde Pausada: crear una venta, publicarla, pausarla y cancelarla
+# @name t6b
+POST {{base}}/properties
+Authorization: Bearer {{login.response.body.token}}
+Content-Type: application/json
+
+{
+  "title": "Casa para cancelar",
+  "description": "Para probar la cancelacion.",
+  "type": "HOUSE",
+  "operation": "SALE",
+  "price": 90000,
+  "currency": "USD",
+  "address": "Calle 1 100",
+  "area": "Tigre",
+  "totalAreaM2": 300,
+  "images": [{ "url": "https://example.com/c.jpg", "isCover": true }]
+}
+
+###
+PATCH {{base}}/properties/{{t6b.response.body.id}}/status
+Authorization: Bearer {{login.response.body.token}}
+Content-Type: application/json
+
+{ "status": "PUBLISHED" }
+
+###
+PATCH {{base}}/properties/{{t6b.response.body.id}}/status
+Authorization: Bearer {{login.response.body.token}}
+Content-Type: application/json
+
+{ "status": "PAUSED" }
+
+### Pausada -> Cancelada -> 200
+PATCH {{base}}/properties/{{t6b.response.body.id}}/status
+Authorization: Bearer {{login.response.body.token}}
+Content-Type: application/json
+
+{ "status": "CANCELLED" }
+
+### Cancelada -> cualquier otra -> 400 (estado final)
+PATCH {{base}}/properties/{{t6b.response.body.id}}/status
+Authorization: Bearer {{login.response.body.token}}
+Content-Type: application/json
+
+{ "status": "PUBLISHED" }
+
+### Con la propiedad en estado final, el 409 de la Tarea 4 ya no aplica: las que quedan PUBLISHED/RESERVED siguen bloqueando el borrado de la inmobiliaria.
+### El caso "cancelar con visita Confirmada -> 409" se prueba en la Tarea 8.
+
+# ─────────────────────────────────────────────
+# Consultas (comentarios) sobre una propiedad
+# Se usa la propiedad "t6" de la seccion anterior: quedo ALQUILADA, y una propiedad alquilada igual admite comentarios.
+# ─────────────────────────────────────────────
+
+### Un interesado comenta, sin token -> 201 { id, authorName, content, reply: null, createdAt }
+# @name c1
+POST {{base}}/properties/{{t6.response.body.id}}/comments
+Content-Type: application/json
+
+{ "authorName": "Ana", "content": "¿Admite mascotas?" }
+
+### Otro comentario -> 201
+# @name c2
+POST {{base}}/properties/{{t6.response.body.id}}/comments
+Content-Type: application/json
+
+{ "authorName": "Luis", "content": "¿Las expensas estan incluidas?" }
+
+### Sin contenido -> 400
+POST {{base}}/properties/{{t6.response.body.id}}/comments
+Content-Type: application/json
+
+{ "authorName": "Ana", "content": "   " }
+
+### Sin nombre -> 400
+POST {{base}}/properties/{{t6.response.body.id}}/comments
+Content-Type: application/json
+
+{ "content": "Hola" }
+
+### Propiedad que no existe -> 404
+POST {{base}}/properties/9999/comments
+Content-Type: application/json
+
+{ "authorName": "Ana", "content": "Hola" }
+
+### Comentar un borrador (todavia no es publico) -> 404
+# @name t7draft
+POST {{base}}/properties
+Authorization: Bearer {{login.response.body.token}}
+Content-Type: application/json
+
+{
+  "title": "Borrador para comentarios", "description": "x", "type": "HOUSE", "operation": "SALE",
+  "price": 100, "currency": "USD", "address": "x", "area": "x", "totalAreaM2": 50,
+  "images": [{ "url": "https://example.com/a.jpg", "isCover": true }]
+}
+
+###
+POST {{base}}/properties/{{t7draft.response.body.id}}/comments
+Content-Type: application/json
+
+{ "authorName": "Ana", "content": "Hola" }
+
+### Listado publico de comentarios (del mas viejo al mas nuevo), reply en null -> 200
+GET {{base}}/properties/{{t6.response.body.id}}/comments
+
+### El dueño responde -> 200, la respuesta queda en el MISMO comentario
+PATCH {{base}}/comments/{{c1.response.body.id}}/reply
+Authorization: Bearer {{login.response.body.token}}
+Content-Type: application/json
+
+{ "reply": "No, disculpá." }
+
+### Responder otra vez -> 409 (una sola respuesta)
+PATCH {{base}}/comments/{{c1.response.body.id}}/reply
+Authorization: Bearer {{login.response.body.token}}
+Content-Type: application/json
+
+{ "reply": "Otra respuesta" }
+
+### Consultas recibidas por TODAS las propiedades de la inmobiliaria (las mas nuevas primero) -> 200 { items, page, limit, total }
+# Cambia el 1 por el id de tu inmobiliaria (el de Carla). Cada item trae la propiedad: property { id, title }.
+GET {{base}}/agencies/1/comments
+Authorization: Bearer {{login.response.body.token}}
+
+### Solo las pendientes (answered=false) o solo las respondidas (answered=true)
+GET {{base}}/agencies/1/comments?answered=false
+Authorization: Bearer {{login.response.body.token}}
+
+### Otro vendedor (Pedro) mira las consultas de la inmobiliaria 1 -> 403; sin token -> 401
+GET {{base}}/agencies/1/comments
+Authorization: Bearer {{loginPedro.response.body.token}}
+
+### Otro vendedor (Pedro) intenta responder -> 403
+PATCH {{base}}/comments/{{c2.response.body.id}}/reply
+Authorization: Bearer {{loginPedro.response.body.token}}
+Content-Type: application/json
+
+{ "reply": "Yo contesto" }
+
+### Sin token -> 401
+PATCH {{base}}/comments/{{c2.response.body.id}}/reply
+Content-Type: application/json
+
+{ "reply": "Hola" }
+
+### Respuesta vacia -> 400
+PATCH {{base}}/comments/{{c2.response.body.id}}/reply
+Authorization: Bearer {{login.response.body.token}}
+Content-Type: application/json
+
+{ "reply": "" }
+
+### Comentario que no existe -> 404
+PATCH {{base}}/comments/9999/reply
+Authorization: Bearer {{login.response.body.token}}
+Content-Type: application/json
+
+{ "reply": "Hola" }
+
+### Listado otra vez: el primer comentario trae su reply; el segundo sigue en null; siguen siendo 2 comentarios (no hay hilo)
+GET {{base}}/properties/{{t6.response.body.id}}/comments
+
+# ─────────────────────────────────────────────
+# Solicitudes de visita
+# La fecha va en ISO 8601 CON zona horaria (el front puede mandar new Date(...).toISOString()).
+# Cambia 2027-03-15 por una fecha futura si ya paso.
+# ─────────────────────────────────────────────
+
+### Preparacion: una propiedad publicada para pedir visitas
+# @name t8
+POST {{base}}/properties
+Authorization: Bearer {{login.response.body.token}}
+Content-Type: application/json
+
+{
+  "title": "Casa para visitas",
+  "description": "Para probar las solicitudes de visita.",
+  "type": "HOUSE",
+  "operation": "SALE",
+  "price": 150000,
+  "currency": "USD",
+  "address": "Calle 7 700",
+  "area": "Pilar",
+  "totalAreaM2": 350,
+  "images": [{ "url": "https://example.com/v.jpg", "isCover": true }]
+}
+
+###
+PATCH {{base}}/properties/{{t8.response.body.id}}/status
+Authorization: Bearer {{login.response.body.token}}
+Content-Type: application/json
+
+{ "status": "PUBLISHED" }
+
+### El interesado pide una visita, sin token -> 201, status PENDING
+# @name v1
+POST {{base}}/properties/{{t8.response.body.id}}/visit-requests
+Content-Type: application/json
+
+{
+  "requesterName": "Maria Gomez",
+  "requesterPhone": "011-4444-4444",
+  "proposedAt": "2027-03-15T15:00:00-03:00",
+  "message": "Puedo despues de las 15hs."
+}
+
+### Otra, sin mensaje -> 201 (message: null)
+# @name v2
+POST {{base}}/properties/{{t8.response.body.id}}/visit-requests
+Content-Type: application/json
+
+{ "requesterName": "Pedro Diaz", "requesterPhone": "011-3333-3333", "proposedAt": "2027-03-16T11:00:00-03:00" }
+
+### Fecha en el pasado -> 400
+POST {{base}}/properties/{{t8.response.body.id}}/visit-requests
+Content-Type: application/json
+
+{ "requesterName": "Maria Gomez", "requesterPhone": "011-4444-4444", "proposedAt": "2020-01-01T10:00:00-03:00" }
+
+### Fecha sin zona horaria -> 400
+POST {{base}}/properties/{{t8.response.body.id}}/visit-requests
+Content-Type: application/json
+
+{ "requesterName": "Maria Gomez", "requesterPhone": "011-4444-4444", "proposedAt": "2027-03-15T15:00:00" }
+
+### Telefono invalido y nombre vacio -> 400 con los campos que fallaron
+POST {{base}}/properties/{{t8.response.body.id}}/visit-requests
+Content-Type: application/json
+
+{ "requesterName": "", "requesterPhone": "abc", "proposedAt": "2027-03-15T15:00:00-03:00" }
+
+### Propiedad que no existe -> 404
+POST {{base}}/properties/9999/visit-requests
+Content-Type: application/json
+
+{ "requesterName": "Maria", "requesterPhone": "011-4444-4444", "proposedAt": "2027-03-15T15:00:00-03:00" }
+
+### Propiedad que no admite visitas (la t6 esta ALQUILADA) -> 409
+POST {{base}}/properties/{{t6.response.body.id}}/visit-requests
+Content-Type: application/json
+
+{ "requesterName": "Maria", "requesterPhone": "011-4444-4444", "proposedAt": "2027-03-15T15:00:00-03:00" }
+
+### Listado del vendedor, con nombre y telefono de quien pidio -> 200 { items, page, limit, total }
+# Cambia el 1 por el id de tu inmobiliaria (el de Carla).
+GET {{base}}/agencies/1/visit-requests
+Authorization: Bearer {{login.response.body.token}}
+
+### Filtrado por estado
+GET {{base}}/agencies/1/visit-requests?status=PENDING
+Authorization: Bearer {{login.response.body.token}}
+
+### Sin token -> 401 (tiene datos de contacto: no es publico)
+GET {{base}}/agencies/1/visit-requests
+
+### Pedro (otro vendedor) mira las solicitudes de la inmobiliaria 1 -> 403
+GET {{base}}/agencies/1/visit-requests
+Authorization: Bearer {{loginPedro.response.body.token}}
+
+### Pendiente -> Realizada: invalida (tiene que pasar por Confirmada) -> 400
+PATCH {{base}}/visit-requests/{{v1.response.body.id}}/status
+Authorization: Bearer {{login.response.body.token}}
+Content-Type: application/json
+
+{ "status": "COMPLETED" }
+
+### Otro vendedor intenta confirmar -> 403
+PATCH {{base}}/visit-requests/{{v1.response.body.id}}/status
+Authorization: Bearer {{loginPedro.response.body.token}}
+Content-Type: application/json
+
+{ "status": "CONFIRMED" }
+
+### Otro vendedor intenta rechazar -> 403
+PATCH {{base}}/visit-requests/{{v1.response.body.id}}/status
+Authorization: Bearer {{loginPedro.response.body.token}}
+Content-Type: application/json
+
+{ "status": "REJECTED" }
+
+### Sin token -> 401
+PATCH {{base}}/visit-requests/{{v1.response.body.id}}/status
+Content-Type: application/json
+
+{ "status": "CONFIRMED" }
+
+### Solicitud que no existe -> 404
+PATCH {{base}}/visit-requests/9999/status
+Authorization: Bearer {{login.response.body.token}}
+Content-Type: application/json
+
+{ "status": "CONFIRMED" }
+
+### Estado que no existe -> 400
+PATCH {{base}}/visit-requests/{{v1.response.body.id}}/status
+Authorization: Bearer {{login.response.body.token}}
+Content-Type: application/json
+
+{ "status": "ACEPTADA" }
+
+### El dueño confirma -> 200
+PATCH {{base}}/visit-requests/{{v1.response.body.id}}/status
+Authorization: Bearer {{login.response.body.token}}
+Content-Type: application/json
+
+{ "status": "CONFIRMED" }
+
+### Con una visita Confirmada, la propiedad NO se edita -> 409 (regla de la Tarea 5)
+PUT {{base}}/properties/{{t8.response.body.id}}
+Authorization: Bearer {{login.response.body.token}}
+Content-Type: application/json
+
+{
+  "title": "x", "description": "x", "type": "HOUSE", "operation": "SALE", "price": 1, "currency": "USD",
+  "address": "x", "area": "x", "totalAreaM2": 45,
+  "images": [{ "url": "https://example.com/a.jpg", "isCover": true }]
+}
+
+### ...ni se cancela -> 409 (regla de la Tarea 6)
+PATCH {{base}}/properties/{{t8.response.body.id}}/status
+Authorization: Bearer {{login.response.body.token}}
+Content-Type: application/json
+
+{ "status": "CANCELLED" }
+
+### ...pero si admite otros cambios de estado -> 200 (pausar)
+PATCH {{base}}/properties/{{t8.response.body.id}}/status
+Authorization: Bearer {{login.response.body.token}}
+Content-Type: application/json
+
+{ "status": "PAUSED" }
+
+### ...y comentarios nuevos (aunque este pausada, sigue siendo publica) -> 201
+POST {{base}}/properties/{{t8.response.body.id}}/comments
+Content-Type: application/json
+
+{ "authorName": "Ana", "content": "¿Sigue disponible?" }
+
+### Confirmada -> Confirmada: no es un cambio -> 400
+PATCH {{base}}/visit-requests/{{v1.response.body.id}}/status
+Authorization: Bearer {{login.response.body.token}}
+Content-Type: application/json
+
+{ "status": "CONFIRMED" }
+
+### Confirmada -> Realizada -> 200
+PATCH {{base}}/visit-requests/{{v1.response.body.id}}/status
+Authorization: Bearer {{login.response.body.token}}
+Content-Type: application/json
+
+{ "status": "COMPLETED" }
+
+### Realizada es final -> 400
+PATCH {{base}}/visit-requests/{{v1.response.body.id}}/status
+Authorization: Bearer {{login.response.body.token}}
+Content-Type: application/json
+
+{ "status": "CANCELLED" }
+
+### Ya no hay visita Confirmada: la propiedad (pausada) se puede editar de nuevo -> 200
+PUT {{base}}/properties/{{t8.response.body.id}}
+Authorization: Bearer {{login.response.body.token}}
+Content-Type: application/json
+
+{
+  "title": "Casa para visitas (editada)", "description": "x", "type": "HOUSE", "operation": "SALE", "price": 140000, "currency": "USD",
+  "address": "Calle 7 700", "area": "Pilar", "totalAreaM2": 350,
+  "images": [{ "url": "https://example.com/v.jpg", "isCover": true }]
+}
+
+### Rechazar una Pendiente -> 200
+PATCH {{base}}/visit-requests/{{v2.response.body.id}}/status
+Authorization: Bearer {{login.response.body.token}}
+Content-Type: application/json
+
+{ "status": "REJECTED" }
+
+### Rechazada es final -> 400
+PATCH {{base}}/visit-requests/{{v2.response.body.id}}/status
+Authorization: Bearer {{login.response.body.token}}
+Content-Type: application/json
+
+{ "status": "CONFIRMED" }
+
+### Listado final: v1 REALIZADA, v2 RECHAZADA, con el titulo de la propiedad
+GET {{base}}/agencies/1/visit-requests
+Authorization: Bearer {{login.response.body.token}}
+
+# ─────────────────────────────────────────────
+# Reseñas de la inmobiliaria
+# Cambia el 1 de /agencies/1/... por el id de tu inmobiliaria (la de Carla).
+# ─────────────────────────────────────────────
+
+### Perfil publico ANTES de reseñar: rating { average: null, count: 0 }
+GET {{base}}/agencies/1
+
+### Un interesado deja una reseña, sin token -> 201
+# @name r1
+POST {{base}}/agencies/1/reviews
+Content-Type: application/json
+
+{ "authorName": "Lucia", "content": "Muy buena atencion, respondieron todo rapido.", "rating": 5 }
+
+### Otra reseña -> 201
+POST {{base}}/agencies/1/reviews
+Content-Type: application/json
+
+{ "authorName": "Marcos", "content": "Correcto, pero tardaron en confirmar la visita.", "rating": 3 }
+
+### Calificacion 0 -> 400
+POST {{base}}/agencies/1/reviews
+Content-Type: application/json
+
+{ "authorName": "Lucia", "content": "Mala", "rating": 0 }
+
+### Calificacion 6 -> 400
+POST {{base}}/agencies/1/reviews
+Content-Type: application/json
+
+{ "authorName": "Lucia", "content": "Excelente", "rating": 6 }
+
+### Calificacion con decimales -> 400
+POST {{base}}/agencies/1/reviews
+Content-Type: application/json
+
+{ "authorName": "Lucia", "content": "Bien", "rating": 4.5 }
+
+### Calificacion como texto -> 400
+POST {{base}}/agencies/1/reviews
+Content-Type: application/json
+
+{ "authorName": "Lucia", "content": "Bien", "rating": "5" }
+
+### Contenido vacio -> 400
+POST {{base}}/agencies/1/reviews
+Content-Type: application/json
+
+{ "authorName": "Lucia", "content": "   ", "rating": 4 }
+
+### Sin nombre -> 400
+POST {{base}}/agencies/1/reviews
+Content-Type: application/json
+
+{ "content": "Bien", "rating": 4 }
+
+### Inmobiliaria que no existe -> 404
+POST {{base}}/agencies/9999/reviews
+Content-Type: application/json
+
+{ "authorName": "Lucia", "content": "Bien", "rating": 4 }
+
+### Listado publico, la mas nueva primero, con el resumen -> 200 { items, page, limit, total, rating }
+GET {{base}}/agencies/1/reviews
+
+### Paginado de a 1
+GET {{base}}/agencies/1/reviews?page=2&limit=1
+
+### Inmobiliaria que no existe -> 404
+GET {{base}}/agencies/9999/reviews
+
+### La reseña aparece enseguida en el perfil publico: rating { average: 4, count: 2 }
+GET {{base}}/agencies/1
+
+# ─────────────────────────────────────────────
+# Feed de actividad (notificaciones del vendedor)
+# Cada consulta, solicitud de visita, reseña y cambio de estado genera una Activity en la MISMA transaccion.
+# Cambia el 1 de /agencies/1/... por el id de tu inmobiliaria (la de Carla).
+# Los eventos de antes de esta tarea no tienen Activity: el feed empieza desde aca.
+# ─────────────────────────────────────────────
+
+### Contador de no leidas ANTES (anotar el numero) -> 200 { unread: N }
+GET {{base}}/agencies/1/activity/unread-count
+Authorization: Bearer {{login.response.body.token}}
+
+### Sin token -> 401
+GET {{base}}/agencies/1/activity/unread-count
+
+### Otro vendedor (Pedro) -> 403 (el feed es solo del dueño)
+GET {{base}}/agencies/1/activity/unread-count
+Authorization: Bearer {{loginPedro.response.body.token}}
+
+### Idem con el listado -> 403
+GET {{base}}/agencies/1/activity
+Authorization: Bearer {{loginPedro.response.body.token}}
+
+### Inmobiliaria que no existe -> 404
+GET {{base}}/agencies/9999/activity
+Authorization: Bearer {{login.response.body.token}}
+
+### Generar eventos. 1) Cambio de estado: republicar la propiedad t8 (estaba PAUSADA) -> 200
+PATCH {{base}}/properties/{{t8.response.body.id}}/status
+Authorization: Bearer {{login.response.body.token}}
+Content-Type: application/json
+
+{ "status": "PUBLISHED" }
+
+### 2) Una consulta nueva -> 201
+POST {{base}}/properties/{{t8.response.body.id}}/comments
+Content-Type: application/json
+
+{ "authorName": "Sofia", "content": "¿Se puede financiar?" }
+
+### 3) Una solicitud de visita nueva -> 201
+POST {{base}}/properties/{{t8.response.body.id}}/visit-requests
+Content-Type: application/json
+
+{ "requesterName": "Julian", "requesterPhone": "011-5555-6666", "proposedAt": "2027-03-20T10:00:00-03:00" }
+
+### 4) Una reseña nueva -> 201
+POST {{base}}/agencies/1/reviews
+Content-Type: application/json
+
+{ "authorName": "Camila", "content": "Muy amables.", "rating": 4 }
+
+### Un intento INVALIDO no genera actividad (la transaccion no llega a guardar nada) -> 400
+POST {{base}}/agencies/1/reviews
+Content-Type: application/json
+
+{ "authorName": "Camila", "content": "Muy amables.", "rating": 9 }
+
+### Contador DESPUES: tiene que haber subido en 4 respecto de la primera consulta
+GET {{base}}/agencies/1/activity/unread-count
+Authorization: Bearer {{login.response.body.token}}
+
+### Feed, lo mas reciente primero: reseña, visita, consulta, cambio de estado -> 200 { items, page, limit, total }
+# @name feed
+GET {{base}}/agencies/1/activity
+Authorization: Bearer {{login.response.body.token}}
+
+### Paginado de a 2
+GET {{base}}/agencies/1/activity?page=1&limit=2
+Authorization: Bearer {{login.response.body.token}}
+
+### Marcar la mas reciente como leida -> 200 con isRead: true
+# @name firstActivity
+PATCH {{base}}/activity/{{feed.response.body.$.items[0].id}}/read
+Authorization: Bearer {{login.response.body.token}}
+
+### Marcarla otra vez: no pasa nada -> 200 (mismo resultado)
+PATCH {{base}}/activity/{{feed.response.body.$.items[0].id}}/read
+Authorization: Bearer {{login.response.body.token}}
+
+### El contador BAJO en 1
+GET {{base}}/agencies/1/activity/unread-count
+Authorization: Bearer {{login.response.body.token}}
+
+### Solo las no leidas: la que marcaste ya no aparece
+GET {{base}}/agencies/1/activity?unread=true
+Authorization: Bearer {{login.response.body.token}}
+
+### Otro vendedor intenta marcar la actividad -> 403
+PATCH {{base}}/activity/{{feed.response.body.$.items[1].id}}/read
+Authorization: Bearer {{loginPedro.response.body.token}}
+
+### Sin token -> 401
+PATCH {{base}}/activity/{{feed.response.body.$.items[1].id}}/read
+
+### Actividad que no existe -> 404
+PATCH {{base}}/activity/9999/read
+Authorization: Bearer {{login.response.body.token}}
+
+### Valor de unread invalido -> 400
+GET {{base}}/agencies/1/activity?unread=quizas
+Authorization: Bearer {{login.response.body.token}}
+
+# ─────────────────────────────────────────────
+# Dashboard de reportes (solo el dueño de la inmobiliaria)
+# Cambia el 1 de /agencies/1/... por el id de tu inmobiliaria (la de Carla).
+# Para ver numeros con sentido, correr antes dev-sql/retroceder-fechas.sql (separa de a 7 dias el historial de la propiedad alquilada).
+# Para verificar a mano: dev-sql/verificar-reportes.sql calcula lo mismo directamente en la base.
+# ─────────────────────────────────────────────
+
+### 1) Propiedades por estado actual -> 200 { items: [{ status, count }] (los 7 estados), total }
+GET {{base}}/agencies/1/reports/status-summary
+Authorization: Bearer {{login.response.body.token}}
+
+### 2) Por mes: publicaciones nuevas, ventas y alquileres -> 200 { items: [{ month, published, sold, rented }] }
+# Los meses sin movimiento entre el primero y el ultimo aparecen con ceros.
+GET {{base}}/agencies/1/reports/monthly
+Authorization: Bearer {{login.response.body.token}}
+
+### 3) Tiempo promedio en mercado -> 200 { averageDays, closedCount }
+# Con retroceder-fechas.sql aplicado, la propiedad alquilada aporta 28 dias.
+GET {{base}}/agencies/1/reports/avg-time-on-market
+Authorization: Bearer {{login.response.body.token}}
+
+### Sin token -> 401
+GET {{base}}/agencies/1/reports/status-summary
+
+### Otro vendedor (Pedro) pide los reportes de la inmobiliaria 1 -> 403 (los tres)
+GET {{base}}/agencies/1/reports/status-summary
+Authorization: Bearer {{loginPedro.response.body.token}}
+
+###
+GET {{base}}/agencies/1/reports/monthly
+Authorization: Bearer {{loginPedro.response.body.token}}
+
+###
+GET {{base}}/agencies/1/reports/avg-time-on-market
+Authorization: Bearer {{loginPedro.response.body.token}}
+
+### Inmobiliaria que no existe -> 404
+GET {{base}}/agencies/9999/reports/monthly
+Authorization: Bearer {{login.response.body.token}}
+
+### Pedro, sobre SU inmobiliaria (id 2) -> 200 con SUS numeros, no los de Carla
+# Si ya borraste su inmobiliaria en la seccion de Inmobiliaria, da 404 (correr npm run seed para recuperarla).
+GET {{base}}/agencies/2/reports/status-summary
+Authorization: Bearer {{loginPedro.response.body.token}}
+
+# ─────────────────────────────────────────────
+# Validaciones y errores (formato unico { error, details? })
+# ─────────────────────────────────────────────
+
+### Ruta que no existe -> 404 en JSON (antes devolvia una pagina HTML "Cannot GET ...")
+GET {{base}}/esto-no-existe
+
+### Idem con otro metodo -> 404 en JSON
+POST {{base}}/properties/1/nada
+
+### JSON mal formado (falta cerrar la llave) -> 400 { error: "El body no es un JSON válido" }
+POST {{base}}/auth/login
+Content-Type: application/json
+
+{ "email": "carla@demo.com", "password": "clave1234"
+
+### Body vacio -> 400 con un detalle por cada campo obligatorio
+POST {{base}}/auth/login
+Content-Type: application/json
+
+{}
+
+### Sin Content-Type ni body -> 400 (tambien con detalle de los campos)
+POST {{base}}/auth/login
+
+### Body que es una lista en vez de un objeto -> 400 con field "body"
+POST {{base}}/auth/login
+Content-Type: application/json
+
+[1, 2, 3]
+
+### Varios campos mal a la vez -> 400 con TODOS los que fallaron, cada uno con su mensaje
+POST {{base}}/properties
+Authorization: Bearer {{login.response.body.token}}
+Content-Type: application/json
+
+{ "title": "", "type": "CASTILLO", "operation": "SALE", "price": -5, "currency": "EUR", "address": "x", "area": "x", "totalAreaM2": 0, "images": [] }
+
+### Id que no es un numero -> 400
+GET {{base}}/properties/abc
+
+### Id con caracteres mal codificados -> 400 { error: "Pedido inválido" } (no un 500)
+GET {{base}}/properties/%E0%A4%A
+
+### Los codigos de estado, resumidos (todos probados en las secciones de arriba):
+###   400 body, query o id invalidos / transicion de estado no permitida
+###   401 sin token, token invalido o vencido, credenciales incorrectas
+###   403 el recurso es de otro vendedor
+###   404 el recurso o la ruta no existen
+###   409 conflicto con el estado actual (email o nombre repetido, propiedad vendida, ya tiene respuesta...)
+###   500 error nuestro: solo { error: "Error interno" }, sin stack (el detalle queda en la consola del servidor)
+
+# ═════════════════════════════════════════════
+# PRUEBA MANUAL DE UN 500 (opcional): un error que el codigo no preve no tiene que mostrar el stack.
+#   1. Detener el servicio de PostgreSQL (Windows: Servicios > postgresql-x64-XX > Detener; o desde pgAdmin no).
+#   2. Pedir el listado de abajo: tiene que responder 500 { "error": "Error interno" } y NADA mas.
+#   3. En la terminal donde corre la API se ve el error completo con su stack (eso es lo esperado: queda en el servidor).
+#   4. Volver a iniciar PostgreSQL y reiniciar la API si hace falta.
+# ═════════════════════════════════════════════
+
+### Con la base caida -> 500 { "error": "Error interno" }
+GET {{base}}/properties

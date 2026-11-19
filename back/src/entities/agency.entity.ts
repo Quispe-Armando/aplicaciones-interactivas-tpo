@@ -23,10 +23,16 @@ export class Agency {
 
   @Column({ type: "varchar", nullable: true, length: 255 })
   officeAddress!: string | null;
-
+/*
   @OneToOne(() => Seller, { nullable: false })
   @JoinColumn({ name: "seller_id" })
   seller!: Seller;
+*/
+  // Si se elimina el Seller, se elimina su Agency (y, en cascada, todo lo que
+  // cuelga de ella). El servicio de "eliminar inmobiliaria" borra al Seller.
+  @OneToOne(() => Seller, { nullable: false, onDelete: "CASCADE", onUpdate: "CASCADE" })
+  @JoinColumn({ name: "seller_id" })
+  seller!: Seller; 
 
   @CreateDateColumn()
   createdAt!: Date;

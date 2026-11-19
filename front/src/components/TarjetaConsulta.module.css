@@ -1,0 +1,29 @@
+.consulta {
+  padding: 0.7rem 1rem;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-left: 4px solid #bbb;
+  border-radius: 8px;
+}
+
+.consulta p {
+  margin: 0.2rem 0;
+}
+
+.pendiente {
+  border-left-color: #f1c40f;
+}
+
+.respondida {
+  border-left-color: #2e9e4f;
+}
+
+.consulta textarea {
+  width: 100%;
+}
+
+.respuesta {
+  padding: 0.5rem 0.75rem;
+  background: #f1f8f3;
+  border-radius: 6px;
+}

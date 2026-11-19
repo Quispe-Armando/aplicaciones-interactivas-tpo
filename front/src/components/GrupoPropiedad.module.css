@@ -1,0 +1,21 @@
+/* Una propiedad con su titulo y, debajo, sus tarjetas (solicitudes de visita o consultas). */
+.grupo {
+  margin: 1.5rem 0;
+}
+
+.grupo h2 {
+  margin-bottom: 0.5rem;
+  font-size: 1.15rem;
+}
+
+.lista {
+  display: grid;
+  gap: 0.6rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.lista > * {
+  min-width: 0;
+}

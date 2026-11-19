@@ -1,0 +1,80 @@
+/* Barra del panel del vendedor: marca, secciones (pestañas) y acciones. */
+.header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem 1.5rem;
+  padding: 0.75rem 1rem;
+  color: #fff;
+  background: #1f2933;
+  border-bottom: 1px solid var(--color-borde);
+}
+
+.marca {
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.nav {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.25rem 1rem;
+}
+
+/* El borde transparente va siempre en la base: al activarse solo cambia el color y la pestaña no "salta". */
+.seccion {
+  padding: 0.25rem 0;
+  color: #fff;
+  text-decoration: none;
+  border-bottom: 2px solid transparent;
+}
+
+.seccion:hover {
+  border-bottom-color: #8a97a6;
+}
+
+.actual {
+  font-weight: 700;
+  border-bottom-color: #fff;
+}
+
+.contador {
+  display: inline-block;
+  min-width: 1.3rem;
+  margin-left: 0.4rem;
+  padding: 0 0.4rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  line-height: 1.3rem;
+  text-align: center;
+  color: #fff;
+  background: var(--color-peligro);
+  border-radius: 999px;
+}
+
+.acciones {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.25rem 1rem;
+  margin-left: auto;
+}
+
+.acciones a {
+  color: #fff;
+}
+
+@media (max-width: 640px) {
+  .header {
+    gap: 0.5rem 1rem;
+    padding: 0.6rem 0.75rem;
+  }
+  .nav {
+    flex: 1 1 100%;
+    gap: 0.25rem 0.9rem;
+  }
+  .acciones {
+    margin-left: 0;
+  }
+}

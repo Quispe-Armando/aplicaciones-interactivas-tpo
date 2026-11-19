@@ -1,0 +1,88 @@
+.fila td {
+  padding: 0.5rem;
+  vertical-align: middle;
+  border-bottom: 1px solid #ddd;
+}
+
+.celdaFoto {
+  width: 136px;
+  /*width: calc(var(--foto-tabla-ancho) + 1rem);*/
+}
+
+.miniatura {
+  display: block;
+  width: 120px;
+  height: 90px;
+  /*width: var(--foto-tabla-ancho);
+  height: var(--foto-tabla-alto);*/
+  object-fit: cover;
+  border-radius: 6px;
+}
+
+.celdaTitulo {
+  min-width: 10rem;
+}
+
+.datos {
+  white-space: nowrap;
+}
+
+.accionesEstado {
+  margin-top: 0.5rem;
+}
+
+.historial td {
+  background: #f7f7f9;
+}
+
+.historial h3 {
+  margin: 0 0 0.5rem;
+  font-size: 1rem;
+}
+
+@media (max-width: 640px) {
+  .fila,
+  .fila td,
+  .historial,
+  .historial td {
+    display: block;
+    width: 100%;
+  }
+  .fila {
+    margin-bottom: 0.9rem;
+    padding: 0.5rem;
+    background: #fff;
+    border: 1px solid var(--color-borde);
+    border-radius: 8px;
+  }
+  .fila td {
+    padding: 0.35rem 0.25rem;
+    border-bottom: 0;
+  }
+  /* Cada dato lleva su etiqueta (data-label) porque la fila de titulos desaparece. */
+  .fila .datos {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    white-space: normal;
+  }
+  .datos::before {
+    content: attr(data-label);
+    font-size: 0.9rem;
+    color: #666;
+  }
+  .celdaFoto {
+    width: 100%;
+  }
+  .miniatura {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
+  }
+  .celdaTitulo {
+    font-weight: 600;
+  }
+  .historial {
+    margin-bottom: 0.9rem;
+  }
+}

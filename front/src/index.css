@@ -1,9 +1,266 @@
+/* ============================================================================
+   Estilos GLOBALES: solo lo que comparten todas las pantallas.
+   - Variables, reset y elementos HTML base.
+   - Piezas de uso general: botones, mensajes, formularios y chips.
+   Todo lo que es de UN solo componente vive en su <Componente>.module.css
+   (CSS Modules: el nombre de la clase queda con scope, no choca con otros).
+   ============================================================================ */
+
 :root {
   font-family: system-ui, sans-serif;
   color: #202124;
   background: #f7f5f0;
+  --color-primario: #1a5fb4;
+  --color-borde: #d6d2c8;
+  --color-peligro: #c62828;
+}
+
+* {
+  box-sizing: border-box;
 }
 
 body {
   margin: 0;
+}
+
+a {
+  color: var(--color-primario);
+}
+
+img {
+  max-width: 100%;
+}
+
+fieldset {
+  min-width: 0;
+}
+
+input,
+select,
+textarea {
+  padding: 0.5rem 0.6rem;
+  font: inherit;
+  border: 1px solid var(--color-borde);
+  border-radius: 6px;
+  background: #fff;
+  resize: none;
+}
+
+/* Contenido principal de las dos layouts (publica y panel). */
+.contenido {
+  max-width: 64rem;
+  margin: 0 auto;
+  padding: 1.25rem 1rem 3rem;
+  overflow-wrap: anywhere;
+}
+
+/* ---------- Botones ---------- */
+
+.boton {
+  padding: 0.5rem 0.9rem;
+  font: inherit;
+  cursor: pointer;
+  border: 1px solid var(--color-borde);
+  border-radius: 6px;
+  background: #fff;
+}
+
+.boton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.boton.primario {
+  color: #fff;
+  background: var(--color-primario);
+  border-color: var(--color-primario);
+}
+
+.boton.peligro {
+  color: #fff;
+  background: var(--color-peligro);
+  border-color: var(--color-peligro);
+}
+
+.boton.peligro-suave {
+  color: var(--color-peligro);
+  border-color: var(--color-peligro);
+}
+
+/* Fila de botones (y links) de acciones. */
+.acciones-fila {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+/* ---------- Mensajes ---------- */
+
+.error {
+  padding: 0.5rem 0.75rem;
+  color: #8a1c1c;
+  background: #fde8e8;
+  border-radius: 6px;
+}
+
+.aviso {
+  color: #555;
+}
+
+.exito {
+  padding: 0.5rem 0.75rem;
+  color: #1c5a2b;
+  background: #e3f4e6;
+  border-radius: 6px;
+}
+
+/* Cargando / vacio / error de carga / no encontrada: bloque centrado. */
+.mensaje {
+  padding: 3rem 0;
+  text-align: center;
+}
+
+/* ---------- Formularios ---------- */
+
+.formulario {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  max-width: 24rem;
+  margin: 0 auto;
+}
+
+.ancho {
+  max-width: 48rem;
+  margin: 1.5rem 0 0;
+}
+
+.formulario label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-weight: 600;
+}
+
+.formulario fieldset {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin: 1rem 0;
+  padding: 0.75rem 1rem 1rem;
+  border: 1px solid var(--color-borde);
+  border-radius: 8px;
+}
+
+.formulario legend {
+  padding: 0 0.4rem;
+  font-weight: 700;
+}
+
+.fila-campos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.fila-campos > .campo {
+  flex: 1 1 12rem;
+}
+
+.acciones-form {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+/* Campo = etiqueta + control + mensaje de error (componente Campo). */
+.campo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.campo label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-weight: 600;
+}
+
+.error-campo {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #8a1c1c;
+}
+
+/* Un campo con error pinta de rojo el borde de su control (sin tocar cada formulario). */
+.campo:has(> .error-campo) input,
+.campo:has(> .error-campo) select,
+.campo:has(> .error-campo) textarea {
+  border-color: var(--color-peligro);
+}
+
+/* Input + boton en la misma linea (contraseña con "Mostrar", amenity con "+", foto con "Agregar"). */
+.password {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.password input {
+  flex: 1 1 8rem;
+  min-width: 0;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  padding: 0;
+  margin: 0.5rem 0 0;
+  list-style: none;
+}
+
+.chips li,
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.15rem 0.6rem;
+  font-size: 0.9rem;
+  background: #e8eef7;
+  border-radius: 999px;
+}
+
+.chips button,
+.chip button {
+  padding: 0;
+  font: inherit;
+  line-height: 1;
+  color: inherit;
+  cursor: pointer;
+  background: none;
+  border: 0;
+}
+
+/* ---------- Mobile (hasta 640px): controles comodos para el dedo ---------- */
+@media (max-width: 640px) {
+  .contenido {
+    padding: 1rem 0.75rem 2.5rem;
+  }
+  h1 {
+    font-size: 1.5rem;
+  }
+  .boton,
+  input,
+  select,
+  textarea {
+    min-height: 2.6rem;
+  }
+  .acciones-form {
+    flex-wrap: wrap;
+  }
+  .acciones-form .boton {
+    flex: 1 1 8rem;
+  }
 }

@@ -1,0 +1,26 @@
+.consultas {
+  width: 100%;
+  max-width: 44rem;
+}
+
+.lista {
+  padding: 0;
+  list-style: none;
+}
+
+.lista li {
+  padding: 0.75rem 1rem;
+  margin-bottom: 0.75rem;
+  background: #fff;
+  border: 1px solid var(--color-borde);
+  border-radius: 8px;
+}
+
+.lista p {
+  margin: 0.25rem 0;
+}
+
+.respuesta {
+  padding-left: 0.75rem;
+  border-left: 3px solid var(--color-primario);
+}

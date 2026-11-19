@@ -1,0 +1,10 @@
+/* Select con su etiqueta, arriba de las listas del panel. */
+.filtro {
+  max-width: 16rem;
+}
+
+@media (max-width: 640px) {
+  .filtro {
+    max-width: none;
+  }
+}

@@ -1,0 +1,11 @@
+.grilla {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
+  gap: 1rem;
+  transition: opacity 0.15s;
+}
+
+/* Mientras llegan los datos nuevos se siguen viendo los anteriores, atenuados. */
+.cargando {
+  opacity: 0.5;
+}
