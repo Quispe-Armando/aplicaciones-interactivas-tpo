@@ -62,8 +62,6 @@ src/
   index.css    Estilos globales (variables, botones, formularios)
 ```
 
-- **Arquitectura, hooks y effects (para explicar en la defensa):** [`ARQUITECTURA.md`](ARQUITECTURA.md)
-- **Cómo cambiar tamaños, colores y formas:** [`GUIA-ESTILOS.md`](GUIA-ESTILOS.md)
 
 ## Cómo se habla con la API
 
